@@ -1,7 +1,18 @@
 var MongoClient = require('mongodb').MongoClient;
+var multipart = require('multipart');
 
 var config = require("./config");
 
+
+// fs stuff
+function download_file(req, path) {
+    req.setBodyEncoding("binary");
+    var stream = new multipart.Stream(req);
+
+    stream.addListener("complete", function() {
+        console.log("GOT FILE");
+    });
+}
 
 // database stuff
 function connect_database(callback) {
@@ -61,7 +72,7 @@ function listEntries(callback, collection) {
         var id_list = [];
         for(var p in result) {
             var entry = result[p];
-            id_list.push(entry["_id"]);
+            id_list.push(entry["_id"].toString());
         }
 
         //callback(true, id_list);
@@ -158,6 +169,8 @@ function deleteEntry(callback, collection, key, value) {
 
 
 // exports
+exports.download_file = download_file;
+
 exports.connect_database = connect_database;
 
 exports.exists = exists;
