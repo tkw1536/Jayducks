@@ -38,6 +38,7 @@ function setup_database(err, db) {
     Users.exists(dummy, "kpj");
 //    Users.registerNew(dummy, "kpj");
     Users.list(dummy);
+    Documents.getPath(dummy, "42");
 }
 
 utils.connect_database(setup_database);

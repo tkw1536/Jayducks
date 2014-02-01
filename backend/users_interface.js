@@ -49,6 +49,18 @@ Users.registerNew = function(callback, username) {
     });
 };
 
+Users.getAttributes = function(callback, username) {
+    callback(false, "Not implemented");
+};
+
+Users.setAttributes = function(callback, username, attributes, merge) {
+    callback(false, "Not implemented");
+};
+
+Users.deleteUser = function(callback, username) {
+    callback(false, "Not implemented");
+};
+
 
 // exports
 exports.Users = Users;
