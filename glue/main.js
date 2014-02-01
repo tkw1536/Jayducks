@@ -103,7 +103,7 @@ function main(port){
 		yawsl.session(function(){return {}; }, 60*60*24*7, global_session_store, [
 			yawsl.subServer("request", handle_non), 
 	   		yawsl.subServer("do", handle_interactive), 
-	    	yawsl.staticServer("../frontend/")
+	    	yawsl.staticServer("./frontend/")
 		])
 	    
 	)).listen(port);
