@@ -1,1 +1,2 @@
-<object type="application/pdf" data="YourFile.pdf"  height="700px" width="90%" </object >
+<object type="application/pdf" data="YourFile.pdf"   width="90%" <a href="YourFile.pdf" alt="filename" ></object >
+Download: <a href="YourFile.pdf" alt="filename" >
