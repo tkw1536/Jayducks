@@ -36,15 +36,30 @@ function setup_database(err, db) {
     function dummy(success, result) {
         console.log("[DUMMY] - status: " + success + " | result: " + JSON.stringify(result));
     }
-    //Users.exists(dummy, "kpj");
-    //Courses.exists(dummy, "bla")
+    Users.exists(dummy, "kpj2");
+    Courses.exists(dummy, "52ed40ffd4e9690b39d96bb2");
 
-    //Users.registerNew(dummy, "kpj");
-    //Users.list(dummy);
+//    Users.list(dummy);
+//    Courses.list(dummy);
+
+//    Users.registerNew(dummy, "kpj2");
+//    Courses.create(dummy);
+
+    Courses.setName(dummy, "52ed40ffd4e9690b39d96bb2", "HubbaBubba");
+    Courses.getName(dummy, "52ed40ffd4e9690b39d96bb2");
+
+    Users.setAttributes(dummy, "kpj2", {"food": "apple"}, true);
+    Courses.setAttributes(dummy, "52ed40ffd4e9690b39d96bb2", {"importance": "very high"});
+
+    Users.getAttributes(dummy, "kpj2");
+    Courses.getAttributes(dummy, "52ed40ffd4e9690b39d96bb2");
+
+    Courses.listGroups(dummy, "52ed40ffd4e9690b39d96bb2");
+
     //Documents.getPath(dummy, "42");
-    //Users.setAttributes(dummy, "kpj", {"blablablabla": 14}, true);
-    //Users.getAttributes(dummy, "kpj");
+
     //Users.deleteUser(dummy, "kpj");
+    Courses.delete(dummy, "52ed40ffd4e9690b39d96bb2");
 }
 
 utils.connect_database(setup_database);

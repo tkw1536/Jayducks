@@ -23,10 +23,10 @@ function exists(callback, collection, key, value) {
 
     function handler(callback, result) {
         if(result == null) {
-            // user does not exist
+            // entry does not exist
             callback(true, false);
         } else {
-            // user does exist
+            // entry does exist
             callback(true, true);
         }
     }
@@ -44,8 +44,8 @@ function addNew(callback, collection, key, value) {
     query["attributes"] = {};
 
     function handler(callback, result) {
-        var userid = result[0]['_id'];
-        callback(true, userid);
+        var id = result[0]['_id'];
+        callback(true, id);
     }
 
     collection.insert(query, {w: 1}, function(err, res) {
@@ -55,13 +55,13 @@ function addNew(callback, collection, key, value) {
 
 function listEntries(callback, collection) {
     function handler(callback, result) {
-        var userid_list = [];
+        var id_list = [];
         for(var p in result) {
             var entry = result[p];
-            userid_list.push(entry["_id"]);
+            id_list.push(entry["_id"]);
         }
 
-        //callback(true, userid_list);
+        //callback(true, id_list);
         callback(true, result); // TODO: fix this
     }
 
@@ -76,11 +76,11 @@ function getProperty(callback, collection, key, value, property_key) {
 
     function handler(callback, result) {
         if(result.length == 0) {
-            callback(false, "User \"" + value + "\" does not exist");
+            callback(false, "Entry '" + value + "' does not exist");
         } else if(result.length == 1) {
             callback(true, result[0][property_key]);
         } else {
-            callback(false, "Multiple users \"" + value + "\" exist, what did you do?!");
+            callback(false, "Multiple entries '" + value + "' exist, what did you do?!");
         }
     }
 
@@ -132,7 +132,7 @@ function setProperty(callback, collection, key, value, property_key, property_va
             property_key
         );
     } else {
-        update_attributes(attributes);
+        update_attributes(property_value);
     }
 }
 
@@ -142,7 +142,7 @@ function deleteEntry(callback, collection, key, value) {
 
     function handler(callback, result) {
         if(result == 0) {
-            callback(false, "User \"" + username + "\" does not exist");
+            callback(false, "Entry \"" + value + "\" does not exist");
         } else {
             callback(true, result);
         }

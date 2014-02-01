@@ -9,3 +9,7 @@
 ### Students
 
 name | attributes
+
+### Courses
+
+name | attributes | groups
