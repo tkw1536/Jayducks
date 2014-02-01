@@ -50,7 +50,7 @@ function exists(callback, collection, key, value) {
     });
 }
 
-function addNew(callback, collection, key, value) {
+function createEntry(callback, collection, key, value) {
     // TODO: check if entry already exists
 
     var query = {};
@@ -58,7 +58,7 @@ function addNew(callback, collection, key, value) {
     query["attributes"] = {};
 
     function handler(callback, result) {
-        var id = result[0]['_id'];
+        var id = result[0]['_id'].toString();
         callback(true, id);
     }
 
@@ -174,7 +174,7 @@ exports.download_file = download_file;
 exports.connect_database = connect_database;
 
 exports.exists = exists;
-exports.addNew = addNew;
+exports.createEntry = createEntry;
 exports.listEntries = listEntries;
 exports.getProperty = getProperty;
 exports.setProperty = setProperty;
