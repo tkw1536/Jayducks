@@ -33,11 +33,16 @@ function setup_database(err, db) {
     Courses.collection = global_db.collection("Courses");
     DocumentGroups.collection = global_db.collection("DocumentGroups");
     DocumentGroups.course_collection = global_db.collection("Courses");
+    Documents.collection = global_db.collection("Documents");
+    Documents.dgroups_collection = global_db.collection("DocumentGroups");
 
     // test some functions
     function dummy(success, result) {
         console.log("[DUMMY] - status: " + success + " | result: " + JSON.stringify(result));
     }
+
+//    Documents.create(dummy, "52ed56f8ad74968342bfa3a7", null);
+
 //    Users.exists(dummy, "kpj2");
 //    Courses.exists(dummy, "52ed40ffd4e9690b39d96bb2");
 //    DocumentGroups.exists(dummy, "52ed56f8ad74968342bfa3a7");
@@ -63,6 +68,7 @@ function setup_database(err, db) {
 //    Courses.listGroups(dummy, "52ed40ffd4e9690b39d96bb2");
 
     //Documents.getPath(dummy, "42");
+//    DocumentGroups.getCourse(dummy, "52ed6ea7e808d84d4ae20883");
 
     //Users.deleteUser(dummy, "kpj");
 //    Courses.delete(dummy, "52ed40ffd4e9690b39d96bb2");
