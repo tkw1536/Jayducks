@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
 
-    <title>Sample Page Layout</title>
+    <title>Logout</title>
 
     <!-- Bootstrap core CSS -->
     <link href="libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -31,7 +31,7 @@
           </button>
           <a class="navbar-brand" href="#">JayDocks</a>
         </div>
-                <div class="navbar-collapse collapse">
+        <div class="navbar-collapse collapse">
           
                 
                   <ul class="nav navbar-nav navbar-right">
@@ -54,13 +54,14 @@
             <li><a href="#">Homepage</a></li>
           </ul>
         </div>
-                <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Page Title</h1>
-              sample data
-          <h2 class="sub-header">Section title</h2>
-              sample data
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header">Are you sure?</h1>
+        <form action="do/logout" method="POST">
+          <input type="hidden" name="go_success" value="/login">
+          <input type="hidden" name="go_fail" value="/user">
+          <button type="submit" value="logout" class="btn btn-default">Yes</button>
+        </form>
         </div>
-      </div>
     </div>
   </body>
 </html>
