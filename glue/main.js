@@ -34,6 +34,7 @@ function perform(methodname, $args, req, res, data, cb){
 		case "user": 
 			users.get_user_info(data, cb); 
 			break; 
+		/* courses */
 		case "list_courses": 
 			if(!users.allowed("list_courses", data)){
 				return cb({"success": "false", "result": "You are unauthorised. "})
@@ -58,6 +59,8 @@ function perform(methodname, $args, req, res, data, cb){
 				cb({"success": s, "result": r})
 			}); 
 			break; 
+		/* document_group */
+		/* document */
 		default:
 			cb({"success":false, "result": "Unknown or unimplemented method. "}); 
 	}
