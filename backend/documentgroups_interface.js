@@ -9,7 +9,7 @@ var DocumentGroups = new Object();
 
 
 DocumentGroups.exists = function(callback, dgroupid) {
-    utils.exists(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid));
+    utils.exists(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()));
 };
 
 DocumentGroups.create = function(callback, courseid) {
@@ -27,11 +27,11 @@ DocumentGroups.create = function(callback, courseid) {
             utils.setProperty(
                 function(err, res) {
                     // TODO: check if an error occurs here
-                }, cccolll, "_id", ObjectID(dgroupid), "parent", courseid, false
+                }, cccolll, "_id", ObjectID(dgroupid.toString()), "parent", courseid, false
             );
 
             // get current course ids
-            utils.getProperty(get_group_dummy, ccoll, "_id", ObjectID(courseid), "groups");
+            utils.getProperty(get_group_dummy, ccoll, "_id", ObjectID(courseid.toString()), "groups");
         } else {
             callback(false, result);
         }
@@ -43,7 +43,7 @@ DocumentGroups.create = function(callback, courseid) {
 
             // add and set new group id(s)
             groups.push(dgroupid);
-            utils.setProperty(set_group_dummy, ccoll, "_id", ObjectID(courseid), "groups", groups);
+            utils.setProperty(set_group_dummy, ccoll, "_id", ObjectID(courseid.toString()), "groups", groups);
         } else {
             callback(false, result);
         }
@@ -74,7 +74,7 @@ DocumentGroups.delete = function(callback, dgroupid) {
 
             if(document_num == 0) {
                 // all groups are deleted
-                utils.deleteEntry(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid));
+                utils.deleteEntry(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()));
             }
         }
 
@@ -94,24 +94,24 @@ DocumentGroups.delete = function(callback, dgroupid) {
 };
 
 DocumentGroups.getName = function(callback, dgroupid) {
-    utils.getProperty(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid), "name");
+    utils.getProperty(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()), "name");
 };
 
 DocumentGroups.setName = function(callback, dgroupid, name) {
-    utils.setProperty(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid), "name", name, false);
+    utils.setProperty(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()), "name", name, false);
 };
 
 DocumentGroups.getCourse = function(callback, dgroupid) {
-    utils.getProperty(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid), "parent");
+    utils.getProperty(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()), "parent");
 };
 
 DocumentGroups.getAttributes = function(callback, dgroupid) {
-    utils.getProperty(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid), "attributes");
+    utils.getProperty(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()), "attributes");
 };
 
 DocumentGroups.setAttributes = function(callback, dgroupid, attributes, merge) {
     var merge = (typeof merge === "undefined") ? false : merge;
-    utils.setProperty(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid), "attributes", attributes, merge);
+    utils.setProperty(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()), "attributes", attributes, merge);
 };
 
 
