@@ -52,6 +52,14 @@ Documents.create = function(callback, dgroupid, request) {
         if(success) {
             // create file
             var path = "./data/" + dgroupid + "/" + docid;
+
+            // add path
+            utils.setProperty(
+                function(err, res) {
+                    // TODO: check if an error occurs here
+                }, cccolll, "_id", ObjectID(dgroupid), "path", path, false
+            );
+
             utils.download_file(request, path);
 
             callback(true, docid);
@@ -68,11 +76,11 @@ Documents.delete = function(callback, id) {
 };
 
 Documents.getName = function(callback, id) {
-    callback(false, "Not implemented");
+    utils.getProperty(callback, this.collection, "_id", ObjectID(id), "name");
 };
 
 Documents.setName = function(callback, id, name) {
-    callback(false, "Not implemented");
+    utils.setProperty(callback, this.collection, "_id", ObjectID(id), "name", name);
 };
 
 Documents.getGroup = function(callback, id) {
@@ -80,15 +88,16 @@ Documents.getGroup = function(callback, id) {
 };
 
 Documents.getAttributes = function(callback, id) {
-    callback(false, "Not implemented");
+    utils.getProperty(callback, this.collection, "_id", ObjectID(id), "attributes");
 };
 
 Documents.setAttributes = function(callback, id, attributes, merge) {
-    callback(false, "Not implemented");
+    var merge = (typeof merge === "undefined") ? false : merge;
+    utils.setProperty(callback, this.collection, "_id", ObjectID(id), "attributes", attributes, merge);
 };
 
 Documents.getPath = function(callback, id) {
-    callback(false, "Not implemented");
+    utils.getProperty(callback, this.collection, "_id", ObjectID(id), "path");
 };
 
 
