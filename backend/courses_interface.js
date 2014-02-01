@@ -16,7 +16,7 @@ Courses.list = function(callback) {
 };
 
 Courses.create = function(callback) {
-    utils.addNew(callback, this.collection, "name", "");
+    utils.createEntry(callback, this.collection, "name", "");
 };
 
 Courses.getName = function(callback, courseid) {

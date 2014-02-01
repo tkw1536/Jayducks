@@ -16,10 +16,18 @@ DocumentGroups.create = function(callback, courseid) {
     var dgroupid = undefined;
     var groups = undefined;
     var ccoll = this.course_collection;
+    var cccolll = this.collection; // -.-'
 
     function adder_dummy(success, result) {
         if(success) {
             dgroupid = result;
+
+            // add parent entry
+            utils.setProperty(
+                function(err, res) {
+                    // TODO: check if an error occurs here
+                }, cccolll, "_id", ObjectID(dgroupid), "parent", courseid, false
+            );
 
             // get current course ids
             utils.getProperty(get_group_dummy, ccoll, "_id", ObjectID(courseid), "groups");
@@ -48,7 +56,7 @@ DocumentGroups.create = function(callback, courseid) {
         }
     }
 
-    utils.addNew(adder_dummy, this.collection, "name", "");
+    utils.createEntry(adder_dummy, this.collection, "name", "");
 };
 
 DocumentGroups.delete = function(callback, dgroupid) {
@@ -64,7 +72,7 @@ DocumentGroups.setName = function(callback, dgroupid, name) {
 };
 
 DocumentGroups.getCourse = function(callback, dgroupid) {
-    callback(false, "Not implemented (ask kpj if you need it)");
+    utils.getProperty(callback, this.collection, "_id", ObjectID(dgroupid), "parent");
 };
 
 DocumentGroups.getAttributes = function(callback, dgroupid) {

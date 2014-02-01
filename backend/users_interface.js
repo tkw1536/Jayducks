@@ -14,7 +14,7 @@ Users.list = function(callback) {
 };
 
 Users.registerNew = function(callback, username) {
-    utils.addNew(callback, this.collection, "name", username);
+    utils.createEntry(callback, this.collection, "name", username);
 };
 
 Users.getAttributes = function(callback, username) {
