@@ -1,9 +1,12 @@
+var utils = require('./utils');
+
+
 // interface
 var Courses = new Object();
 
 
 Courses.exists = function(callback, courseid) {
-    callback(false, "Not implemented");
+    utils.exists(callback, this.collection, "_id", courseid);
 };
 
 Courses.list = function(callback) {
