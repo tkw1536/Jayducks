@@ -29,12 +29,31 @@ function setup_database(err, db) {
     console.log("Successfully connected to database");
 
     // setup database access for interface objects
-    Users.collection = global_db.collection("Students");
-    Courses.collection = global_db.collection("Courses");
-    DocumentGroups.collection = global_db.collection("DocumentGroups");
-    DocumentGroups.course_collection = global_db.collection("Courses");
-    Documents.collection = global_db.collection("Documents");
-    Documents.dgroups_collection = global_db.collection("DocumentGroups");
+    Users.collection = {
+        "users": global_db.collection("Students"),
+        "courses": global_db.collection("Courses"),
+        "documentgroups": global_db.collection("DocumentGroups"),
+        "documents": global_db.collection("Documents")
+    };
+    Courses.collection = {
+        "users": global_db.collection("Students"),
+        "courses": global_db.collection("Courses"),
+        "documentgroups": global_db.collection("DocumentGroups"),
+        "documents": global_db.collection("Documents")
+    };
+    DocumentGroups.collection = {
+        "users": global_db.collection("Students"),
+        "courses": global_db.collection("Courses"),
+        "documentgroups": global_db.collection("DocumentGroups"),
+        "documents": global_db.collection("Documents")
+    };
+    Documents.collection = {
+        "users": global_db.collection("Students"),
+        "courses": global_db.collection("Courses"),
+        "documentgroups": global_db.collection("DocumentGroups"),
+        "documents": global_db.collection("Documents")
+    };
+
 
     // test some functions
     function dummy(success, result) {
@@ -55,7 +74,7 @@ function setup_database(err, db) {
 //    DocumentGroups.create(dummy, "52ed550da5721e1742de8665");
 
 //    Courses.setName(dummy, "52ed53a0e236988c41c0d274", "jDogs");
-//    Courses.getName(dummy, "52ed40ffd4e9690b39d96bb2");
+//    Courses.getName(dummy, "52ed733291052c1a0f3a07cc");
 //    DocumentGroups.setName(dummy, "52ed40bd9af82be938d3f49e", "Hottentotten");
 //    DocumentGroups.getName(dummy, "52ed40bd9af82be938d3f49e");
 
