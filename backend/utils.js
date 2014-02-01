@@ -3,8 +3,8 @@ var MongoClient = require('mongodb').MongoClient;
 
 // database stuff
 function connect_database(callback) {
-    //MongoClient.connect("mongodb://box.w1536.tk:27017/hackathon-w14", callback);
-    MongoClient.connect("mongodb://localhost:27017/hackathon-w14", callback);
+    MongoClient.connect("mongodb://box.w1536.tk:27017/hackathon-w14", callback);
+    //MongoClient.connect("mongodb://localhost:27017/hackathon-w14", callback);
 }
 
 // catch all the errors!
@@ -61,8 +61,8 @@ function listEntries(callback, collection) {
             id_list.push(entry["_id"]);
         }
 
-        //callback(true, id_list);
-        callback(true, result); // TODO: fix this
+        callback(true, id_list);
+        //callback(true, result); // TODO: fix this
     }
 
     collection.find().toArray(function(err, res) {

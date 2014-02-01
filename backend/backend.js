@@ -27,11 +27,11 @@ function setup_database(err, db) {
     global_db = db;
 
     console.log("Successfully connected to database");
-
+    
     // setup database access for interface objects
     Users.collection = global_db.collection("Students");
     Courses.collection = global_db.collection("Courses");
-
+/*
     // test some functions
     function dummy(success, result) {
         console.log("[DUMMY] - status: " + success + " | result: " + JSON.stringify(result));
@@ -59,7 +59,7 @@ function setup_database(err, db) {
     //Documents.getPath(dummy, "42");
 
     //Users.deleteUser(dummy, "kpj");
-    Courses.delete(dummy, "52ed40ffd4e9690b39d96bb2");
+    Courses.delete(dummy, "52ed40ffd4e9690b39d96bb2");*/
 }
 
 utils.connect_database(setup_database);
