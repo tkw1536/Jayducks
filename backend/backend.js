@@ -33,12 +33,15 @@ function setup_database(err, db) {
 
     // test some functions
     function dummy(success, result) {
-        console.log("[DUMMY] - status: " + success + " | result: " + result);
+        console.log("[DUMMY] - status: " + success + " | result: " + JSON.stringify(result));
     }
-    Users.exists(dummy, "kpj");
-//    Users.registerNew(dummy, "kpj");
-    Users.list(dummy);
-    Documents.getPath(dummy, "42");
+    //Users.exists(dummy, "kpj");
+    //Users.registerNew(dummy, "kpj");
+    //Users.list(dummy);
+    //Documents.getPath(dummy, "42");
+    //Users.setAttributes(dummy, "kpj", {"blablablabla": 14}, true);
+    //Users.getAttributes(dummy, "kpj");
+    //Users.deleteUser(dummy, "kpj");
 }
 
 utils.connect_database(setup_database);
