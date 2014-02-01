@@ -8,6 +8,9 @@ var users = require("./users.js");
 
 var global_session_store = {}; 
 
+function strStartsWith(str, prefix) {
+    return str.indexOf(prefix) === 0;
+}
 
 
 function perform(methodname, $args, req, res, data, cb){
@@ -105,9 +108,22 @@ function main(port){
 		yawsl.session(function(){return {}; }, 60*60*24*7, global_session_store, [
 			yawsl.subServer("request", handle_non), 
 	   		yawsl.subServer("do", handle_interactive), 
+	   		function(req, res, data){
+	   			if(!data.session.value.username){
+	   				if(strStartsWith(req.url, "/libs/") || strStartsWith(req.url, "/js/") || strStartsWith(req.url, "/css/") || strStartsWith(req.url, "/login/")){
+
+	   					return false; 
+	   				}
+	   				res.writeHead(303, {
+					  'Location': "/login/"
+					});
+					res.end('Logged out, please login at /login/. ');
+	   				return true; 
+	   			}
+	   			return false; 
+	   		}, 
 	    	yawsl.staticServer("./frontend/")
 		])
-	    
 	)).listen(port);
 }
 
