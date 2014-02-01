@@ -110,7 +110,7 @@ function main(port){
 	   		yawsl.subServer("do", handle_interactive), 
 	   		function(req, res, data){
 	   			if(!data.session.value.username){
-	   				if(strStartsWith(req.url, "/libs/") || strStartsWith(req.url, "/js/") || strStartsWith(req.url, "/css/") || strStartsWith(req.url, "/login/")){
+	   				if(strStartsWith(req.url, "/about/") || strStartsWith(req.url, "/libs/") || strStartsWith(req.url, "/js/") || strStartsWith(req.url, "/css/") || strStartsWith(req.url, "/login/")){
 
 	   					return false; 
 	   				}

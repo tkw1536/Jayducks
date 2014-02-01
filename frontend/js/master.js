@@ -14,6 +14,17 @@ $(function(){
 			)
 			.submit(); 
 			return false; 
-		})
+		}); 
 	}
+
+	var user_name = $("#user-name"); 
+
+	if(user_name.length > 0){
+		loadExternalJS("/request/user?type=js&varname=user", function(){
+			if(user.success){
+				user_name.text(user.result.username); 
+			} else {}
+		}); 
+	}
+	
 })
