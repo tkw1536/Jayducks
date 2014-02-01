@@ -13,18 +13,13 @@ $(function(){
 			*/
 			var main_element = $(".main"); 
 			
-			var courseTable=$("<table/>").attr("id","tab");
-              $("#TableHere").append(courseTable);
+			$("#ListCoursesHere").append($("<ol>"))
               for(var i=0;i<courses.length;i++)
               {
-              	$("<tr>")
-              	.append(
-					$("<td>").text(courses[i]["id"]), 
-	           		 $("<td>").text(courses[i]["name"])
-              	).appendTo(courseTable)
-	            	
+              	$("<li>")
+					.append($("<a>").attr("href","/courses/#"+courses[i]["id"])).text(courses[i]["name"]))
+              		.appendTo($("#ListCoursesHere"))
               } 
-
 
 		} else {
 			alert("Error: " + courselist.result); 
