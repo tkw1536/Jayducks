@@ -31,35 +31,41 @@ function setup_database(err, db) {
     // setup database access for interface objects
     Users.collection = global_db.collection("Students");
     Courses.collection = global_db.collection("Courses");
+    DocumentGroups.collection = global_db.collection("DocumentGroups");
+    DocumentGroups.course_collection = global_db.collection("Courses");
 
     // test some functions
     function dummy(success, result) {
         console.log("[DUMMY] - status: " + success + " | result: " + JSON.stringify(result));
     }
-    Users.exists(dummy, "kpj2");
-    Courses.exists(dummy, "52ed40ffd4e9690b39d96bb2");
+//    Users.exists(dummy, "kpj2");
+//    Courses.exists(dummy, "52ed40ffd4e9690b39d96bb2");
+//    DocumentGroups.exists(dummy, "52ed56f8ad74968342bfa3a7");
 
 //    Users.list(dummy);
 //    Courses.list(dummy);
 
 //    Users.registerNew(dummy, "kpj2");
 //    Courses.create(dummy);
+//    DocumentGroups.create(dummy, "52ed550da5721e1742de8665");
 
-    Courses.setName(dummy, "52ed40ffd4e9690b39d96bb2", "HubbaBubba");
-    Courses.getName(dummy, "52ed40ffd4e9690b39d96bb2");
+//    Courses.setName(dummy, "52ed53a0e236988c41c0d274", "jDogs");
+//    Courses.getName(dummy, "52ed40ffd4e9690b39d96bb2");
+//    DocumentGroups.setName(dummy, "52ed40bd9af82be938d3f49e", "Hottentotten");
+//    DocumentGroups.getName(dummy, "52ed40bd9af82be938d3f49e");
 
-    Users.setAttributes(dummy, "kpj2", {"food": "apple"}, true);
-    Courses.setAttributes(dummy, "52ed40ffd4e9690b39d96bb2", {"importance": "very high"});
+//    Users.setAttributes(dummy, "kpj2", {"food": "apple"}, true);
+//    Courses.setAttributes(dummy, "52ed40ffd4e9690b39d96bb2", {"importance": "very high"});
 
-    Users.getAttributes(dummy, "kpj2");
-    Courses.getAttributes(dummy, "52ed40ffd4e9690b39d96bb2");
+//    Users.getAttributes(dummy, "kpj2");
+//    Courses.getAttributes(dummy, "52ed40ffd4e9690b39d96bb2");
 
-    Courses.listGroups(dummy, "52ed40ffd4e9690b39d96bb2");
+//    Courses.listGroups(dummy, "52ed40ffd4e9690b39d96bb2");
 
     //Documents.getPath(dummy, "42");
 
     //Users.deleteUser(dummy, "kpj");
-    Courses.delete(dummy, "52ed40ffd4e9690b39d96bb2");
+//    Courses.delete(dummy, "52ed40ffd4e9690b39d96bb2");
 }
 
 utils.connect_database(setup_database);
