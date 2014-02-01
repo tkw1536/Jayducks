@@ -1,27 +1,37 @@
-var yawsl = require("yawsl"); 
-var http = require("http"); 
-var url = require("url"); 
-var qs = require('querystring');
+var 
+	http = require("http"), 
+	url = require("url"), 
+	qs =  require('querystring'), 
+	yawsl = require("yawsl"); 
+
+var users = require("./users.js"); 
 
 var global_session_store = {}; 
 
-function perform(methodname, $args, req, res, data){
+
+
+function perform(methodname, $args, req, res, data, cb){
 	switch(methodname)
 	{
 		case "result":
 			if(data.session.value.last_interactive_result){
-				return {"success": true, "result": data.session.value.last_interactive_result};
+				cb({"success": true, "result": data.session.value.last_interactive_result}); 
 			} else {
-				return {"success": false, "result": "No data available"};
+				cb({"success": false, "result": "No data available"}); 
 			}
 			break;
-		/*
-		case "session":
-			return {"success": true, "result": data.session.value};
-			break;
-		*/
+
+		//user  stuff
+		case "login": 
+			users.login($args["username"], $args["pass"], data, cb); 
+			break; 
+		case "logout": 
+			users.logout(data, cb); 
+		case "user": 
+			users.get_user_info(data, cb); 
+			break; 
 		default:
-			return {"success":false, "result": "Unknown or unimplemented method. "}; 
+			cb({"success":false, "result": "Unknown or unimplemented method. "}); 
 	}
 }
 
@@ -32,19 +42,19 @@ function handle_non(req, res, data){
 	var $methodname = parsed_url.pathname.substr(1); 
 	var varname = parsed_url.query.varname || "response_"+$methodname; 
 	var type = parsed_url.query.type || "json"; 
-	var params = JSON.parse(parsed_url.query.params || "{}");
-	var actionres = perform($methodname, params, req, res, data); 
-
-	if(type == "json"){
-		res.writeHead(200, {"Content-Type": "application/json"});
-		res.end(JSON.stringify(actionres)); 
-	} else if(type == "jsonp"){
-		res.writeHead(200, {"Content-Type": "application/javascript"});
-		res.end(varname+"("+JSON.stringify(actionres)+");"); 
-	} else {
-		res.writeHead(200, {"Content-Type": "application/javascript"});
-		res.end("var "+varname+"="+JSON.stringify(actionres)+";"); 
-	}
+	var params = parsed_url.query || {}; 
+	perform($methodname, params, req, res, data, function(actionres){
+		if(type == "json"){
+			res.writeHead(200, {"Content-Type": "application/json"});
+			res.end(JSON.stringify(actionres)); 
+		} else if(type == "jsonp"){
+			res.writeHead(200, {"Content-Type": "application/javascript"});
+			res.end(varname+"("+JSON.stringify(actionres)+");"); 
+		} else {
+			res.writeHead(200, {"Content-Type": "application/javascript"});
+			res.end("var "+varname+"="+JSON.stringify(actionres)+";"); 
+		}
+	}); 
 }
 
 function handle_interactive(req, res, data){
@@ -60,24 +70,25 @@ function handle_interactive(req, res, data){
 		var parsed_url = url.parse(req.url, true); 
 		var $methodname = parsed_url.pathname.substr(1); 
 		var params = POST; 
-		var actionres = perform($methodname, params, req, res, data); 
+		perform($methodname, params, req, res, data, function(actionres){
+			data.session.value.last_interactive_result = actionres; 
+			var go_success = POST.go_success || "/"; 
+			var go_fail = POST.go_fail; 
 
-		data.session.value.last_interactive_result = actionres; 
+			if(actionres["success"] == true){
+				res.writeHead(303, {
+				  'Location': go_success
+				});
+				res.end('{"success": "true", result: "Redirecting"}');
+			} else {
+				res.writeHead(303, {
+				  'Location': go_fail || go_success
+				});
+				res.end('{"success": "false", result: "Redirecting"}');
+			}
+		}); 
 
-		var go_success = POST.go_success || "/"; 
-		var go_fail = POST.go_fail; 
-
-		if(actionres["success"] == true){
-			res.writeHead(303, {
-			  'Location': go_success
-			});
-			res.end('{"success": "true", result: "Redirecting"}');
-		} else {
-			res.writeHead(303, {
-			  'Location': go_fail || go_success
-			});
-			res.end('{"success": "false", result: "Redirecting"}');
-		}
+		
 		return false; 
 	});
 
