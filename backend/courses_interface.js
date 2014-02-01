@@ -41,6 +41,7 @@ Courses.listGroups = function(callback, courseid) {
 };
 
 Courses.delete = function(callback, courseid) {
+    // TODO: Recursively delete documentgroups and documents
     utils.deleteEntry(callback, this.collection, "_id", ObjectID(courseid));
 };
 

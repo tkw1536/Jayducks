@@ -31,35 +31,6 @@ function setup_database(err, db) {
     // setup database access for interface objects
     Users.collection = global_db.collection("Students");
     Courses.collection = global_db.collection("Courses");
-/*
-    // test some functions
-    function dummy(success, result) {
-        console.log("[DUMMY] - status: " + success + " | result: " + JSON.stringify(result));
-    }
-    Users.exists(dummy, "kpj2");
-    Courses.exists(dummy, "52ed40ffd4e9690b39d96bb2");
-
-//    Users.list(dummy);
-//    Courses.list(dummy);
-
-//    Users.registerNew(dummy, "kpj2");
-//    Courses.create(dummy);
-
-    Courses.setName(dummy, "52ed40ffd4e9690b39d96bb2", "HubbaBubba");
-    Courses.getName(dummy, "52ed40ffd4e9690b39d96bb2");
-
-    Users.setAttributes(dummy, "kpj2", {"food": "apple"}, true);
-    Courses.setAttributes(dummy, "52ed40ffd4e9690b39d96bb2", {"importance": "very high"});
-
-    Users.getAttributes(dummy, "kpj2");
-    Courses.getAttributes(dummy, "52ed40ffd4e9690b39d96bb2");
-
-    Courses.listGroups(dummy, "52ed40ffd4e9690b39d96bb2");
-
-    //Documents.getPath(dummy, "42");
-
-    //Users.deleteUser(dummy, "kpj");
-    Courses.delete(dummy, "52ed40ffd4e9690b39d96bb2");*/
 }
 
 utils.connect_database(setup_database);

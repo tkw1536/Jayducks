@@ -1,10 +1,17 @@
 var MongoClient = require('mongodb').MongoClient;
 
+var config = require("./config");
+
 
 // database stuff
 function connect_database(callback) {
+<<<<<<< HEAD
     MongoClient.connect("mongodb://box.w1536.tk:27017/hackathon-w14", callback);
     //MongoClient.connect("mongodb://localhost:27017/hackathon-w14", callback);
+=======
+    //MongoClient.connect("mongodb://box.w1536.tk:27017/hackathon-w14", callback);
+    MongoClient.connect("mongodb://" + config["address"] + ":" + config["port"] + "/" + config["database"], callback);
+>>>>>>> backend
 }
 
 // catch all the errors!
@@ -31,6 +38,7 @@ function exists(callback, collection, key, value) {
         }
     }
 
+    console.log(JSON.stringify(query));
     collection.findOne(query, function(err, res) {
         catch_error(callback, handler, err, res);
     });
