@@ -30,3 +30,41 @@ module.exports.list_courses = function(cb){
 		}
 	}); 
 }; 
+
+module.exports.create_course = function(name, cb){
+	backend.Courses.create(function(success, res){
+		if(!success){
+			cb(success, res); 
+		} else {
+			backend.Courses.setName(function(success, res2){
+				if(!success){
+					cb(success, res2); 
+				} else {
+					cb(true, {"name": name, "id": res})
+				}
+			}, res, name); 
+		}
+	}); 
+};
+
+module.exports.create_course = function(name, cb){
+	backend.Courses.create(function(success, res){
+		if(!success){
+			cb(success, res); 
+		} else {
+			backend.Courses.setName(function(success, res2){
+				if(!success){
+					cb(success, res2); 
+				} else {
+					cb(true, {"name": name, "id": res})
+				}
+			}, res, name); 
+		}
+	}); 
+}; 
+
+module.exports.delete_course = function(id, cb){
+	backend.Courses.delete(function(success, res){
+			cb(success, res); 
+	}, id); 
+}; 

@@ -27,6 +27,11 @@ module.exports.validate_pass = function(user, pass, cb){
     }
 }
 
+module.exports.allowed = function(action, data){
+	console.log(action); 
+	return data.session.value.username?true:false; 
+}
+
 module.exports.login = function(user, pass, data, cb){
 	if(data.session.value.username){
 		return cb({"success": false, "result": "Already authenticated, please logout first. "});
