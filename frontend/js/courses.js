@@ -17,7 +17,10 @@ $(function(){
               for(var i=0;i<courses.length;i++)
               {
               	$("<li>")
-					.append($("<a>").attr("href","/courses/#"+courses[i]["id"])).text(courses[i]["name"]))
+					.append(
+						$("<a>")
+							.attr("href","/courses/#"+courses[i]["id"])
+						.text(courses[i]["name"]))
               		.appendTo($("#ListCoursesHere"))
               } 
 
