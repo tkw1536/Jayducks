@@ -55,6 +55,8 @@ function handle_non(req, res, data){
 			res.end("var "+varname+"="+JSON.stringify(actionres)+";"); 
 		}
 	}); 
+
+	return true; 
 }
 
 function handle_interactive(req, res, data){

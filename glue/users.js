@@ -1,37 +1,46 @@
-var backend = require('../backend/backend.js'); 
+var backend = require('../backend/backend.js'), 
+	ldap = require('ldapjs');
 
-module.exports.validate_pass = function(user, pass){
-	/*
-		function check_ldap_pass($user, $pass) {
-			//connect to ldap and check pass
-			if($user == "" || $pass == ""){
-				return false; 
-			}
-			$ldap_host = 'jacobs.jacobs-university.de';
-			$ldap_port = 389;
-			$ds = @ldap_connect($ldap_host,$ldap_port);
-			$res = @ldap_bind($ds, $user . "@" . $ldap_host, $pass); 
-			@ldap_unbind($ds); 
-			return $res; 
-		}
-	*/
-	return user=="admin" && pass=="test"; 
+module.exports.validate_pass = function(user, pass, cb){
+	var username = user+"@jacobs.jacobs-university.de"; 
+
+	var client = ldap.createClient({
+          url: 'ldap://jacobs.jacobs-university.de/',
+          timeout: 5000,
+          connectTimeout: 10000
+    });
+
+    try {
+        client.bind(username, pass, function (error) {
+            if(error){
+            	cb(false);    
+            } else {
+                cb(true); 
+            }
+            client.unbind(); 
+        });
+    } catch(error){
+       cb(false); 
+       try{
+
+       }catch(f){}
+    }
 }
 
 module.exports.login = function(user, pass, data, cb){
 	if(data.session.value.username){
 		return cb({"success": false, "result": "Already authenticated, please logout first. "});
 	}
-	var suc = module.exports.validate_pass(user, pass); 
- 
-	//TODO: Create user if required. 
 
-	if(suc){
-		data.session.value.username = user; 
-		return cb({"success": true, "result": {"username": user}});
-	} else {
-		return cb({"success": false, "result": "Authentication failed. "});
-	}
+	module.exports.validate_pass(user, pass, function(suc){
+		if(suc){
+			data.session.value.username = user; 
+			return cb({"success": true, "result": {"username": user}});
+		} else {
+			return cb({"success": false, "result": "Authentication failed. "});
+		}
+	}); 
+	
 }
 
 module.exports.logout = function(data, cb){
