@@ -8,15 +8,15 @@ var Documents = new Object();
 
 
 Documents.exists = function(callback, id) {
-    utils.exists(callback, this.collection, "_id", ObjectID(id));
+    utils.exists(callback, this.collection["documents"], "_id", ObjectID(id));
 };
 
 Documents.create = function(callback, dgroupid, request) {
     // TODO: add groups in a better way
     var docid = undefined;
     var documents = undefined;
-    var ccoll = this.dgroups_collection;
-    var cccolll = this.collection; // sorry...
+    var ccoll = this.collection["documentgroups"];
+    var cccolll = this.collection["documents"]; // sorry...
 
     function adder_dummy(success, result) {
         if(success) {
@@ -68,36 +68,48 @@ Documents.create = function(callback, dgroupid, request) {
         }
     }
 
-    utils.createEntry(adder_dummy, this.collection, "name", "");
+    utils.createEntry(adder_dummy, this.collection["documents"], "name", "");
 };
 
 Documents.delete = function(callback, id) {
-    callback(false, "Not implemented");
+    // delete file
+    function delete_file(err, res) {
+        if(err) {
+            callback(false, err);
+            return;
+        }
+
+        // TODO: delete file
+        
+        // delete database entry
+        utils.deleteEntry(callback, this.collection["documents"], "_id", ObjectID(id));
+    }
+    Documents.getPath(delete_file, id);
 };
 
 Documents.getName = function(callback, id) {
-    utils.getProperty(callback, this.collection, "_id", ObjectID(id), "name");
+    utils.getProperty(callback, this.collection["documents"], "_id", ObjectID(id), "name");
 };
 
 Documents.setName = function(callback, id, name) {
-    utils.setProperty(callback, this.collection, "_id", ObjectID(id), "name", name);
+    utils.setProperty(callback, this.collection["documents"], "_id", ObjectID(id), "name", name);
 };
 
 Documents.getGroup = function(callback, id) {
-    utils.getProperty(callback, this.collection, "_id", ObjectID(id), "parent");
+    utils.getProperty(callback, this.collection["documents"], "_id", ObjectID(id), "parent");
 };
 
 Documents.getAttributes = function(callback, id) {
-    utils.getProperty(callback, this.collection, "_id", ObjectID(id), "attributes");
+    utils.getProperty(callback, this.collection["documents"], "_id", ObjectID(id), "attributes");
 };
 
 Documents.setAttributes = function(callback, id, attributes, merge) {
     var merge = (typeof merge === "undefined") ? false : merge;
-    utils.setProperty(callback, this.collection, "_id", ObjectID(id), "attributes", attributes, merge);
+    utils.setProperty(callback, this.collection["documents"], "_id", ObjectID(id), "attributes", attributes, merge);
 };
 
 Documents.getPath = function(callback, id) {
-    utils.getProperty(callback, this.collection, "_id", ObjectID(id), "path");
+    utils.getProperty(callback, this.collection["documents"], "_id", ObjectID(id), "path");
 };
 
 
