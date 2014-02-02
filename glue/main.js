@@ -153,13 +153,11 @@ function handle_interactive(req, res, data){
 	
 	if($methodname == "upload_doc"){
 		if(!users.allowed("upload_doc", data)){
-			if(actionres["success"] == true){
-				res.writeHead(303, {
-					'Location': go_fail || go_success
-				});
-				res.end('{"success": "false", result: "Redirecting"}');
-			}
-			return cb({"success": "false", "result": "You are unauthorised. "})
+			res.writeHead(303, {
+				'Location': "/"
+			});
+		    res.end('{"success": "false", result: "Redirecting"}');
+			return;
 		}
 		db_data.upload_doc(req, function(s, r){
 			cb({"success": s, "result": r})
