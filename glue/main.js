@@ -1,8 +1,9 @@
 var 
 http = require("http"), 
 url = require("url"), 
-qs =  require('querystring'), 
-yawsl = require("yawsl"); 
+qs =  require("querystring"), 
+yawsl = require("yawsl"),
+formidable = require("formidable");
 
 var users = require("./users.js"); 
 var db_data = require("./data.js");
@@ -19,7 +20,7 @@ function perform(methodname, $args, req, res, data, cb){
 	try{
 			switch(methodname)
 			{
-				case "result":
+			case "result":
 				if(data.session.value.last_interactive_result){
 					cb({"success": true, "result": data.session.value.last_interactive_result}); 
 				} else {
@@ -94,6 +95,14 @@ function perform(methodname, $args, req, res, data, cb){
 					cb({"success": s, "result": r})
 				}); 
 				break; 
+			case "docgroup_info": 
+				if(!users.allowed("docgroup_info", data)){
+					return cb({"success": "false", "result": "You are unauthorised. "})
+				}
+				db_data.docgroup_info($args["id"], function(s, r){
+					cb({"success": s, "result": r})
+				}); 
+				break; 
 			/* documents */
 			case "list_docs": 
 				if(!users.allowed("list_docs", data)){
@@ -103,6 +112,17 @@ function perform(methodname, $args, req, res, data, cb){
 					cb({"success": s, "result": r})
 				}); 
 				break;
+			case "upload_doc": 
+				cb({"success": false, "result": "Interactive only"}); 
+				break;
+			case "document_info": 
+				if(!users.allowed("document_info", data)){
+					return cb({"success": "false", "result": "You are unauthorised. "})
+				}
+				db_data.document_info($args["id"], function(s, r){
+					cb({"success": s, "result": r})
+				}); 
+				break; 
 			default:
 				cb({"success":false, "result": "Unknown or unimplemented method. "}); 
 		}
@@ -115,7 +135,6 @@ function perform(methodname, $args, req, res, data, cb){
 
 function handle_non(req, res, data){
 	var parsed_url = url.parse(req.url, true); 
-
 	var $methodname = parsed_url.pathname.substr(1); 
 	var varname = parsed_url.query.varname || "response_"+$methodname; 
 	var type = parsed_url.query.type || "json"; 
@@ -138,6 +157,48 @@ function handle_non(req, res, data){
 
 function handle_interactive(req, res, data){
 	//handle the interactive one here
+	var parsed_url = url.parse(req.url, true) || "/"; 
+	var $methodname = parsed_url.pathname.substr(1); 
+
+	var params = {}; 
+
+	var cb = function(actionres){
+		data.session.value.last_interactive_result = actionres; 
+		var go_success = params.go_success || "/"; 
+		var go_fail = params.go_fail; 
+
+		if(actionres["success"] == true){
+			res.writeHead(303, {
+				'Location': go_success
+			});
+			res.end('{"success": "true", result: "Redirecting"}');
+		} else {
+			res.writeHead(303, {
+				'Location': go_fail || go_success
+			});
+			res.end('{"success": "false", result: "Redirecting"}');
+		}
+	};
+	
+	if($methodname == "upload_doc"){
+
+			var form = formidable.IncomingForm();
+			form.parse(req, function(err, fields, files) {
+                if(!users.allowed("upload_doc", data)){
+					return cb({"success": false, "result": "You are unauthorised. "})
+				}
+        		params = fields; 
+        		if(err){
+        			cb({"succss": false, "result": err}); 
+        		} else {
+        			db_data.upload_doc(params.id, params.name, files.file.path, function(s, r){
+        				cb({"success": s, "result": r})
+        			}); 
+        		}
+        	}); 
+        
+		return true;  
+	}
 
 	var body = ""; 
 	req.on('data', function (data) {
@@ -145,27 +206,9 @@ function handle_interactive(req, res, data){
 	});
 	req.on('end',function(){
 		var POST = qs.parse(body);
-
-		var parsed_url = url.parse(req.url, true); 
-		var $methodname = parsed_url.pathname.substr(1); 
-		var params = POST; 
-		perform($methodname, params, req, res, data, function(actionres){
-			data.session.value.last_interactive_result = actionres; 
-			var go_success = POST.go_success || "/"; 
-			var go_fail = POST.go_fail; 
-
-			if(actionres["success"] == true){
-				res.writeHead(303, {
-					'Location': go_success
-				});
-				res.end('{"success": "true", result: "Redirecting"}');
-			} else {
-				res.writeHead(303, {
-					'Location': go_fail || go_success
-				});
-				res.end('{"success": "false", result: "Redirecting"}');
-			}
-		}); 
+		
+		params = POST; 
+		perform($methodname, params, req, res, data, cb); 
 
 		
 		return false; 
@@ -196,6 +239,17 @@ function main(port){
 				}
 				return false; 
 			}, 
+			yawsl.subServer("get", function(req, res, data){
+				var parsed_url = url.parse(req.url, true) || "/"; 
+				var id = parsed_url.pathname.substr(1);
+				if(!users.allowed("get_doc", data)){
+					res.writeHead(403);
+					res.end('Unauthorised. ');
+				}
+
+				db_data.redirect_file(id, req, res); 
+				return true; 
+			}), 
 			yawsl.staticServer("./frontend/")
 			])
 		)).listen(port);

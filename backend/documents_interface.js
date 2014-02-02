@@ -12,7 +12,7 @@ Documents.exists = function(callback, id) {
     utils.exists(callback, this.collection["documents"], "_id", ObjectID(id.toString()));
 };
 
-Documents.create = function(callback, dgroupid, request) {
+Documents.create = function(callback, dgroupid, tmp_path) {
     // TODO: add groups in a better way
     var docid = undefined;
     var documents = undefined;
@@ -50,8 +50,7 @@ Documents.create = function(callback, dgroupid, request) {
 
     function set_group_dummy(success, result) {
         if(success) {
-            // create file
-            var path = "./data/" + dgroupid + "/" + docid;
+            var path = "./data/" + dgroupid + "/";
 
             // add path
             utils.setProperty(
@@ -60,9 +59,16 @@ Documents.create = function(callback, dgroupid, request) {
                 }, me.collection["documents"], "_id", ObjectID(dgroupid.toString()), "path", path, false
             );
 
-            utils.download_file(request, path);
+            function on_file_loaded(success, res) {
+                if(!success) {
+                    callback(false, res);
+                    return;
+                }
 
-            callback(true, docid);
+                callback(true, docid);
+            }
+
+            utils.save_file(on_file_loaded, tmp_path, path, docid);
         } else {
             callback(false, result);
         }

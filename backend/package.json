@@ -1,7 +1,6 @@
 {
 	"name": "backend_jacobshack-w14",
 	"dependencies": {
-		"mongodb": "latest",
-        "multipart": "latest"
+		"mongodb": "latest"
 	}
 }

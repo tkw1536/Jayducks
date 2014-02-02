@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="/favicon.ico">
 
-  <title>Category List - JayDucks</title>
+  <title>Paper - Jayducks</title>
 
   <link href="/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="/libs/bootstrap/css/dashboard.css" rel="stylesheet">
@@ -45,16 +45,16 @@
         <ul class="nav nav-sidebar">
           <li><a href="/">Course List</a></li>
           <li><a href="#" id="course-link">Course</a></li>
-          <li><a class="active" href="#">Category</a></li>
+          <li><a href="#" id="category-link">Category</a></li>
+          <li class="active"><a href="#">Paper</a></li>
           <li class="divider"><hr /></li>
-          <li><a id="delete-docgroup">Delete Category</a></li>
-          <li><a id="upload-doc">Upload Document</a></li>
+          <li><a href="#">Download</a></li>
         </ul>
       </div>
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <h1 id="title">Documents</h1>
-        <p></p>
-        <div id="docList"></div>
+        <h1 id='title'>Paper</h1>
+        <object type="application/pdf" data="YourFile.pdf"  height="700px" width="90%" <a href="YourFile.pdf" alt="filename"></object >
+        Download: <a href="YourFile.pdf" alt="filename" >
       </div>
     </div>
   </div>
@@ -65,8 +65,8 @@
   <script type= "text/javascript" src="/libs/external.js"></script>
 
   <script type= "text/javascript" src="/js/master.js"></script>
+  <script type= "text/javascript" src="/js/paper.js"></script>
 
-  <script type= "text/javascript" src="/js/docs.js"></script>
 
 </body>
 </html>

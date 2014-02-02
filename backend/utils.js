@@ -1,19 +1,20 @@
 var MongoClient = require('mongodb').MongoClient;
-var multipart = require('multipart');
+var fs = require('fs');
+
 
 var config = require("./config");
 
 
 // fs stuff
-function download_file(req, path) {
-    return; // no working request object given
+function save_file(callback, tmp_path, final_path, final_file) {
+    // synchronous function calls FTW!!!
+    try {
+        fs.mkdirSync(final_path);
+    } catch(e) {}
 
-    req.setBodyEncoding("binary");
-    var stream = new multipart.Stream(req);
+    fs.renameSync(tmp_path, final_path + final_file);
 
-    stream.addListener("complete", function() {
-        console.log("GOT FILE");
-    });
+    callback(true, final_file);
 }
 
 // database stuff
@@ -170,7 +171,7 @@ function deleteEntry(callback, collection, key, value) {
 
 
 // exports
-exports.download_file = download_file;
+exports.save_file = save_file;
 
 exports.connect_database = connect_database;
 

@@ -1,4 +1,6 @@
 var backend = require('../backend/backend.js'); 
+var formidable = require('formidable');
+var fs = require("fs"); 
 
 
 module.exports.list_courses = function(cb){
@@ -134,17 +136,107 @@ module.exports.create_docgroup = function(id, name, cb){
 		}
 	}, id); 
 };
- 
+
 
 module.exports.delete_course = function(id, cb){
 	backend.Courses.delete(function(success, res){
-			cb(success, res); 
+		cb(success, res); 
 	}, id); 
 }; 
 
 
 module.exports.delete_docgroup = function(id, cb){
 	backend.DocumentGroups.delete(function(success, res){
-			cb(success, res); 
+		cb(success, res); 
 	}, id);
 }
+
+
+module.exports.docgroup_info  = function(id, cb){
+	backend.DocumentGroups.getName(function(suc, res){
+		if(!suc){
+			cb(suc, res); 
+		} else {
+			backend.DocumentGroups.getCourse(function(suc, res2){
+				if(!suc){
+					cb(false, res2); 
+				} else {
+					cb(true, {
+						"name": res, 
+						"parent": res2
+					});
+				}
+			}, id.toString())
+			
+		}
+	}, id.toString()); 
+}; 
+
+module.exports.upload_doc = function(id, name, path, cb){
+	backend.Documents.create(function(suc, res){
+		if(!suc){
+			cb(false, res); 
+			return; 
+		}
+		backend.Documents.setName(function(success, res2){
+			if(!success){
+				cb(success, res2); 
+			} else {
+				cb(true, {"name": name, "id": res})
+			}
+		}, res, name); 
+	}, id, path); 
+}
+
+module.exports.document_info  = function(id, cb){
+	backend.Documents.getName(function(suc, res){
+		if(!suc){
+			cb(suc, res); 
+		} else {
+			backend.Documents.getGroup(function(suc, res2){
+				if(!suc){
+					cb(suc, res2); 
+				} else { 
+					backend.DocumentGroups.getCourse(function(suc, res3){
+						if(!suc){
+							cb(false, res3); 
+						} else {
+							cb(true, { 
+								"name": res, 
+								"parent": res2, 
+								"pparent": res3.toString()
+							});
+						}
+					}, res2)
+
+				}
+			}, id.toString())
+			
+		}
+	}, id.toString()); 
+}; 
+
+module.exports.redirect_file = function(id, req, resp){
+	//pass through file or send 404
+
+	console.log(id); 
+
+	backend.Documents.getPath(function(suc, res){
+		if(!suc){
+			res.writeHead(404);
+			res.end(res);
+		} else {
+			try{
+				console.log(res); 
+				resp.writeHead(200, {"Content-Type": "application/pdf"}); 
+				var fileStream = fs.createReadStream(res);//pump to the client
+				fileStream.pipe(resp);
+			} catch(e){
+				console.log(e); 
+				resp.writeHead(500);
+				resp.end("STREAM_PIPE_FAIL");
+			}
+			
+		}
+	}, id); 
+}; 
