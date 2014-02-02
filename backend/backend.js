@@ -98,7 +98,7 @@ function setup_database(err, db) {
 //    Users.getAttributes(dummy, "kpj2");
 //    Courses.getAttributes(dummy, "52ed40ffd4e9690b39d96bb2");
 
-//    Courses.listGroups(dummy, "52ed40ffd4e9690b39d96bb2");
+//    Courses.listGroups(dummy, "52eda4b02bca191b5e4ac562");
 
 //    Documents.getPath(dummy, "42");
 //    DocumentGroups.getCourse(dummy, "52ed6ea7e808d84d4ae20883");
