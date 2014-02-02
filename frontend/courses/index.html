@@ -43,14 +43,16 @@
     <div class="row">
       <div class="col-sm-3 col-md-2 sidebar">
         <ul class="nav nav-sidebar">
-          <li class="active"><a href="/">Courses</a></li>
-          <li><a href="/new/course/">Add Course</a></li>
+          <li><a href="/">Course List</a></li>
+          <li><a class="active" href="#">Course</a></li>
+          <li><a id="delete-course">Delete Course</a></li>
+          <li><a id="create-docgroup">Add Category</a></li>
         </ul>
       </div>
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <h1>Courses</h1>
-        <p>Choose a course </p>
-        <div id="ListCoursesHere"> </div>
+        <h1 id="title">Courses</h1>
+        <p></p>
+        <div id="docGroupList"></div>
       </div>
     </div>
   </div>
@@ -61,7 +63,7 @@
   <script type= "text/javascript" src="/libs/external.js"></script>
 
   <script type= "text/javascript" src="/js/master.js"></script>
-  <script type= "text/javascript" src="/js/courses.js"></script>
+  <script type= "text/javascript" src="/js/docgroups.js"></script>
 
 </body>
 </html>
