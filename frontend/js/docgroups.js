@@ -8,7 +8,6 @@ $(function(){
 	}); 
 
 	$("#delete-course").click(function(){
-
 		$("<form action='/do/delete_course' method='POST'>")
 		.append(
 			"<input type='hidden' name='id' value='"+id+"'>", 
@@ -39,4 +38,6 @@ $(function(){
 			alert("Error: " + docGroupList.result); 
 		}
 	})
+
+	$(document.getElementById("create-docgroup")).attr("href", "/new/documentgroup/#"+id); 
 })

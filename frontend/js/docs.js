@@ -21,16 +21,7 @@ $(function(){
 
 	loadExternalJS("/request/list_docs?type=js&varname=docList&id="+id, function(){
 		if(docList.success){
-			//display it on the page somehow
-			//needs results for ids
 			var docList = docList.result; 
-			/*
-				{
-					"name": "Some_name_here", 
-					"id": "..."
-				}
-			*/
-			
 			var ol = $("<ol>").appendTo("#docList"); 
               for(var i=0;i<courses.length;i++)
               {
