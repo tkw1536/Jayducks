@@ -70,6 +70,14 @@ function perform(methodname, $args, req, res, data, cb){
 				}); 
 				break; 
 			/* document_group */
+			case "create_docgroup": 
+				if(!users.allowed("create_docgroup", data)){
+					return cb({"success": "false", "result": "You are unauthorised. "})
+				}
+				db_data.create_docgroup($args["id"], $args["name"], function(s, r){
+					cb({"success": s, "result": r}); 
+				});
+				break; 
 			case "list_docgroups": 
 				if(!users.allowed("list_docgroups", data)){
 					return cb({"success": "false", "result": "You are unauthorised. "})

@@ -25,12 +25,12 @@ $(function(){
 			var ol = $("<ol>").appendTo("#docList"); 
               for(var i=0;i<courses.length;i++)
               {
-              	$("<li>")
-					.append(
-						$("<a>")
-							.attr("href","/docs/#"+docGroups[i]["id"])
-						.text(docGroups[i]["name"]))
-              		.appendTo(ol); 
+          		$("<li>")
+				.append(
+					$("<a>")
+					.attr("href","/docs/#"+docGroups[i]["id"])
+					.text(docGroups[i]["name"]))
+          		.appendTo(ol); 
               } 
 
 		} else {

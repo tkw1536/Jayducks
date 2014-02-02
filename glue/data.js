@@ -49,7 +49,7 @@ module.exports.list_docgroups = function(id, cb){
 						cache.push({
 							"name": res, 
 							"id": ress
-						})
+						}); 
 						iterator(i+1); 
 					}
 				}, ress); 
@@ -105,7 +105,6 @@ module.exports.course_info = function(id, cb){
 
 module.exports.create_course = function(name, cb){
 	backend.Courses.create(function(success, res){
-		console.log("Created", arguments); 
 		if(!success){
 			cb(success, res); 
 		} else {
@@ -118,6 +117,22 @@ module.exports.create_course = function(name, cb){
 			}, res, name); 
 		}
 	}); 
+};
+
+module.exports.create_docgroup = function(id, name, cb){
+	backend.DocumentGroups.create(function(success, res){
+		if(!success){
+			cb(success, res); 
+		} else {
+			backend.DocumentGroups.setName(function(success, res2){
+				if(!success){
+					cb(success, res2); 
+				} else {
+					cb(true, {"name": name, "id": res})
+				}
+			}, res, name); 
+		}
+	}, id); 
 };
  
 

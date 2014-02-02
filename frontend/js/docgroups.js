@@ -23,14 +23,17 @@ $(function(){
 
 			var docGroups = docGroupList.result; 
 			var ol = $("<ol>").appendTo("#docGroupList"); 
+
+			console.log(docGroups); 
 			
-              for(var i=0;i<docGroupList.length;i++)
+              for(var i=0;i<docGroups.length;i++)
               {
               	$("<li>")
 					.append(
 						$("<a>")
-							.attr("href","/docgroups/#"+docGroups[i]["id"])
-						.text(docGroups[i]["name"]))
+						.attr("href","/category/#"+docGroups[i]["id"])
+						.text(docGroups[i]["name"])
+					)
               		.appendTo(ol)
               } 
 
@@ -39,5 +42,5 @@ $(function(){
 		}
 	})
 
-	$(document.getElementById("create-docgroup")).attr("href", "/new/documentgroup/#"+id); 
+	$(document.getElementById("create-docgroup")).attr("href", "/new/category/#"+id); 
 })
