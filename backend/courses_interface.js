@@ -25,7 +25,16 @@ Courses.create = function(callback) {
             return;
         }
 
-        utils.setProperty(callback, me.collection["courses"], "_id", ObjectID(res.toString()), "groups", []);
+        var cid = res;
+        utils.setProperty(
+            function(success, res) {
+                if(!success) {
+                    callback(false, res);
+                    return;
+                }
+                callback(true, cid);
+            }, me.collection["courses"], "_id", ObjectID(cid.toString()), "groups", []
+        );
     }
 
     utils.createEntry(on_create, this.collection["courses"], "name", "");
