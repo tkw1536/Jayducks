@@ -1,18 +1,18 @@
 var MongoClient = require('mongodb').MongoClient;
-var multipart = require('multipart');
+
 
 var config = require("./config");
 
 
 // fs stuff
-function download_file(req, path) {
-    return; // no working request object given
+function download_file(callback, req) {
+    var form = formidable.IncomingForm();
 
-    req.setBodyEncoding("binary");
-    var stream = new multipart.Stream(req);
+    form.parse(req, function(err, fields, files) {
+        // copy file, etc.
 
-    stream.addListener("complete", function() {
-        console.log("GOT FILE");
+
+        callback(true, fields);
     });
 }
 
