@@ -78,6 +78,23 @@ function perform(methodname, $args, req, res, data, cb){
 					cb({"success": s, "result": r})
 				}); 
 				break;
+			case "delete_docgroup": 
+				if(!users.allowed("delete_docgroup", data)){
+					return cb({"success": "false", "result": "You are unauthorised. "})
+				}
+				db_data.delete_docgroup($args["id"], function(s, r){
+					cb({"success": s, "result": r})
+				}); 
+				break; 
+			/* documents */
+			case "list_docs": 
+				if(!users.allowed("list_docs", data)){
+					return cb({"success": "false", "result": "You are unauthorised. "})
+				}
+				db_data.list_docs($args["id"], function(s, r){
+					cb({"success": s, "result": r})
+				}); 
+				break;
 			default:
 				cb({"success":false, "result": "Unknown or unimplemented method. "}); 
 		}

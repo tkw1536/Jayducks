@@ -32,18 +32,46 @@ module.exports.list_courses = function(cb){
 }; 
 
 module.exports.list_docgroups = function(id, cb){
-	backend.DocGroups.list(function(success, res){
+	backend.Courses.listGroups(function(success, res){
 		if(!success){
 			cb(success, res); 
 		} else {
-
 			var cache = []; 
 			var iterator = function(i){
 				if(i>=res.length){
 					return cb(true, cache); 
 				}
 				var ress = res[i].toString();
-				backend.DocGroups.getName(function(suc, res){
+				backend.DocumentGroups.getName(function(suc, res){
+					if(!suc){
+						cb(suc, res); 
+					} else {
+						cache.push({
+							"name": res, 
+							"id": ress
+						})
+						iterator(i+1); 
+					}
+				}, ress); 
+			}; 
+
+			iterator(0); 
+		}
+	}, id); 
+}; 
+
+module.exports.list_docs = function(id, cb){
+	backend.DocumentGroups.listDocuments(function(success, res){
+		if(!success){
+			cb(success, res); 
+		} else {
+			var cache = []; 
+			var iterator = function(i){
+				if(i>=res.length){
+					return cb(true, cache); 
+				}
+				var ress = res[i].toString();
+				backend.Documents.getName(function(suc, res){
 					if(!suc){
 						cb(suc, res); 
 					} else {
@@ -98,3 +126,10 @@ module.exports.delete_course = function(id, cb){
 			cb(success, res); 
 	}, id); 
 }; 
+
+
+module.exports.delete_docgroup = function(id, cb){
+	backend.DocumentGroups.delete(function(success, res){
+			cb(success, res); 
+	}, id);
+}
