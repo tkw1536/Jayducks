@@ -5,6 +5,7 @@ var
 	yawsl = require("yawsl"); 
 
 var users = require("./users.js"); 
+var db_data = require("./data.js");
 
 var global_session_store = {}; 
 
@@ -32,6 +33,30 @@ function perform(methodname, $args, req, res, data, cb){
 			users.logout(data, cb); 
 		case "user": 
 			users.get_user_info(data, cb); 
+			break; 
+		case "list_courses": 
+			if(!users.allowed("list_courses", data)){
+				return cb({"success": "false", "result": "You are unauthorised. "})
+			}
+			db_data.list_courses(function(s, r){
+				cb({"success": s, "result": r})
+			}); 
+			break; 
+		case "create_course": 
+			if(!users.allowed("create_course", data)){
+				return cb({"success": "false", "result": "You are unauthorised. "})
+			}
+			db_data.create_course($args["name"], function(s, r){
+				cb({"success": s, "result": r}); 
+			});
+			break; 
+		case "delete_course": 
+			if(!users.allowed("delete_course", data)){
+				return cb({"success": "false", "result": "You are unauthorised. "})
+			}
+			db_data.delete_course($args["id"], function(s, r){
+				cb({"success": s, "result": r})
+			}); 
 			break; 
 		default:
 			cb({"success":false, "result": "Unknown or unimplemented method. "}); 

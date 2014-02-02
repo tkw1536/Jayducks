@@ -76,8 +76,8 @@ function listEntries(callback, collection) {
             id_list.push(entry["_id"].toString());
         }
 
-        //callback(true, id_list);
-        callback(true, result); // TODO: fix this
+        callback(true, id_list);
+        //callback(true, result); // TODO: fix this
     }
 
     collection.find().toArray(function(err, res) {
