@@ -227,8 +227,6 @@ module.exports.document_info  = function(id, cb){
 module.exports.redirect_file = function(id, req, resp){
 	//pass through file or send 404
 
-	console.log(id); 
-
 	backend.Documents.getPath(function(suc, res){
 		if(!suc){
 			res.writeHead(404);
@@ -246,3 +244,32 @@ module.exports.redirect_file = function(id, req, resp){
 		}
 	}, id); 
 }; 
+
+module.exports.list_comments = function(id, cb){
+	backend.Documents.getCommentNumber(function(success, res){
+		if(!success){
+			cb(success, res); 
+		} else {
+			var cache = []; 
+			var iterator = function(i){
+				if(i>=res){
+					return cb(true, cache); 
+				}
+				backend.Documents.getComment(function(suc, res){
+					if(!suc){
+						cb(suc, res); 
+					} else {
+						cache.push(res); 
+						iterator(i+1); 
+					}
+				}, id, i); 
+			}; 
+
+			iterator(0); 
+		}
+	}, id); 
+}; 
+
+module.exports.add_comment = function(id, user, text, cb){
+	backend.Documents.addComment(cb, id, {"user": user, "text": text})
+}

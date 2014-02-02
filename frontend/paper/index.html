@@ -50,9 +50,7 @@
           <li class="divider"><hr /></li>
           <li><a href="#" id="dwn" target="_blank">Download</a></li>
           <li><a href="#" id="do-delete">Delete Document</a></li>
-          <li><div id="email"><a href="" title="Share by Email">Email</a></div> </li>
-
-
+          <li id="email"><a href="" title="Share by Email">Email</a></li>
 
 
         </ul>
@@ -62,19 +60,15 @@
         <object type="application/pdf" data="" id="result"  height="700px" width="90%">
             <a href="" alt="your-file"></a>
         </object >
-        Share this document with your friends: <div id = "fb_share" class="fb-send" data-href="" data-width="80" data-height="30" data-colorscheme="light"></div>
+
+        <div id="comments">
+        </div>
       </div>
     </div>
   </div>
 
-  <script type = "text/javascript" src="/libs/jquery/jquery.js"></script>
-  <script type = "text/javascript" src="/libs/bootstrap/js/bootstrap.min.js"></script>
-  <script type= "text/javascript" src="/libs/jquery.nicescroll/jquery.nicescroll.min.js"></script>
-  <script type= "text/javascript" src="/libs/external.js"></script>
 
-  <script type= "text/javascript" src="/js/master.js"></script>
-  <script type= "text/javascript" src="/js/paper.js"></script>
-  <!-- "Social" Buttons -->
+  <!-- "Social" Buttons
     <div id="fb-root"></div>
     <script>(function(d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
@@ -83,7 +77,16 @@
       js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));</script>
-    <!-- /Social Buttons -->
+    /Social Buttons -->
+
+
+  <script type="text/javascript" src="/libs/jquery/jquery.js"></script>
+  <script type="text/javascript" src="/libs/bootstrap/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/libs/jquery.nicescroll/jquery.nicescroll.min.js"></script>
+  <script type="text/javascript" src="/libs/external.js"></script>
+
+  <script type="text/javascript" src="/js/master.js"></script>
+  <script type="text/javascript" src="/js/paper.js"></script>
 
 </body>
 </html>

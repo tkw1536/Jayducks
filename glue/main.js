@@ -130,7 +130,23 @@ function perform(methodname, $args, req, res, data, cb){
 				db_data.delete_document($args["id"], function(s, r){
 					cb({"success": s, "result": r})
 				}); 
-				break; 
+				break;
+			case "list_comments": 
+				if(!users.allowed("list_comments", data)){
+					return cb({"success": "false", "result": "You are unauthorised. "})
+				}
+				db_data.list_comments($args["id"], function(s, r){
+					cb({"success": s, "result": r})
+				}); 
+				break;
+			case "add_comment": 
+				if(!users.allowed("add_comment", data)){
+					return cb({"success": "false", "result": "You are unauthorised. "})
+				}
+				console.log($args); 
+				db_data.add_comment($args["id"], data.session.value.username, $args["text"], function(s, r){
+					cb({"success": s, "result": r})
+				}); 
 			default:
 				cb({"success":false, "result": "Unknown or unimplemented method. "}); 
 		}

@@ -26,8 +26,34 @@ $(function(){
 		return false; 
 	}); 
 
+
+	var refresh_comments = function(){
+		loadExternalJS("/request/list_comments?type=js&varname=comment_info&id="+id, function(){
+			if(comment_info.success){
+				$("#comments").empty().append(
+				$("<form>")
+				.append(
+					"<input type='hidden' name='id' value='"+id+"'>", 
+					"<input type='text' name='message' value='Ur message here' id='commenttext'>", 
+					$("<button>").text("Add comment").click(function(){
+						loadExternalJS("/request/add_comment?type=js&varname=_nothing_&text="+escape($("#commenttext").val())+"&id="+id, function(){
+							refresh_comments();
+						}); 
+						return false; 
+					})
+				)
+				)
+				comment_info.result.map(function(c){
+					console.log(c); 
+				}); 
+			} else {}
+		}); 
+	}
+
+	refresh_comments();
+	
+
 	$("#email").find("a").attr("href","mailto:?subject=I wanted you to see this site&amp;body=Check out this pastpaper:"+location.href+location.hash)
-	$("#fb_share").attr("data-href","/get/"+id);
 	$("#result").attr("data", "/get/"+id); 
 	$("#result").find("a").attr("href", "/get/"+id); 
 	$("#dwn").attr("href", "/get/"+id);
