@@ -20,25 +20,26 @@ $(function(){
 			"<input type='hidden' name='id' value='"+id+"'>", 
 			"<input type='hidden' name='go_success' value='/courses/#"+parent_id+"'>", 
 			"<input type='hidden' name='go_fail' value='"+location.pathname+location.hash+">"
-		)
+			)
 		.submit(); 
 		return false; 
 	}); 
 
 	loadExternalJS("/request/list_docs?type=js&varname=doc_List&id="+id, function(){
-		console.log(doc_List); 
 		if(doc_List.success){
 			var docList = doc_List.result; 
 			var ol = $("<ol>").appendTo("#docList"); 
-              for(var i=0;i<doc_List.length;i++)
-              {
-          		$("<li>")
+
+			for(var i=0;i<docList.length;i++)
+			{
+
+				$("<li>")
 				.append(
 					$("<a>")
-					.attr("href","/docs/#"+doc_List[i]["id"])
-					.text(doc_List[i]["name"]))
-          		.appendTo(ol); 
-              } 
+					.attr("href","/paper/#"+docList[i]["id"])
+					.text(docList[i]["name"]))
+				.appendTo(ol); 
+			} 
 
 		} else {
 			alert("Error: " + doc_List.result); 

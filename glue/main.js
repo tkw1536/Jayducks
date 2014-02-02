@@ -20,7 +20,7 @@ function perform(methodname, $args, req, res, data, cb){
 	try{
 			switch(methodname)
 			{
-				case "result":
+			case "result":
 				if(data.session.value.last_interactive_result){
 					cb({"success": true, "result": data.session.value.last_interactive_result}); 
 				} else {
@@ -115,6 +115,14 @@ function perform(methodname, $args, req, res, data, cb){
 			case "upload_doc": 
 				cb({"success": false, "result": "Interactive only"}); 
 				break;
+			case "document_info": 
+				if(!users.allowed("document_info", data)){
+					return cb({"success": "false", "result": "You are unauthorised. "})
+				}
+				db_data.document_info($args["id"], function(s, r){
+					cb({"success": s, "result": r})
+				}); 
+				break; 
 			default:
 				cb({"success":false, "result": "Unknown or unimplemented method. "}); 
 		}
@@ -173,18 +181,23 @@ function handle_interactive(req, res, data){
 	};
 	
 	if($methodname == "upload_doc"){
+
 			var form = formidable.IncomingForm();
 			form.parse(req, function(err, fields, files) {
-                console.log(arguments);
+                if(!users.allowed("upload_doc", data)){
+					return cb({"success": false, "result": "You are unauthorised. "})
+				}
         		params = fields; 
         		if(err){
         			cb({"succss": false, "result": err}); 
         		} else {
-        			data.upload_doc(params.id, params.name, files.file.path, cb); 
+        			db_data.upload_doc(params.id, params.name, files.file.path, function(s, r){
+        				cb({"success": s, "result": r})
+        			}); 
         		}
         	}); 
         
-		return; 
+		return true;  
 	}
 
 	var body = ""; 
@@ -226,6 +239,17 @@ function main(port){
 				}
 				return false; 
 			}, 
+			yawsl.subServer("get", function(req, res, data){
+				var parsed_url = url.parse(req.url, true) || "/"; 
+				var id = parsed_url.pathname.substr(1);
+				if(!users.allowed("get_doc", data)){
+					res.writeHead(403);
+					res.end('Unauthorised. ');
+				}
+
+				db_data.redirect_file(id, req, res); 
+				return true; 
+			}), 
 			yawsl.staticServer("./frontend/")
 			])
 		)).listen(port);

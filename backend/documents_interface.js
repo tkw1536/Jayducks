@@ -19,7 +19,6 @@ Documents.create = function(callback, dgroupid, tmp_path) {
     var me = this;
 
     function adder_dummy(success, result) {
-        console.log(arguments);
         if(success) {
             docid = result;
 
@@ -38,7 +37,6 @@ Documents.create = function(callback, dgroupid, tmp_path) {
     }
 
     function get_group_dummy(success, result) {
-        console.log(arguments);
         if(success) {
             documents = result || [];
 
@@ -51,7 +49,6 @@ Documents.create = function(callback, dgroupid, tmp_path) {
     }
 
     function set_group_dummy(success, result) {
-        console.log(arguments);
         if(success) {
             var path = "./data/" + dgroupid + "/";
 
