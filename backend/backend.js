@@ -99,7 +99,8 @@ function setup_database(err, db) {
 
 //    Courses.listGroups(dummy, "52eda4b02bca191b5e4ac562");
 
-//    Documents.getPath(dummy, "42");
+//    Documents.addComment(dummy, "52eded5ed4e3f2f5744b0bcd", {owner: "Hugo"});
+//    Documents.getCommentNumber(dummy, "52eded5ed4e3f2f5744b0bcd");
 //    DocumentGroups.getCourse(dummy, "52ed6ea7e808d84d4ae20883");
 
 //    Users.deleteUser(dummy, "kpj");

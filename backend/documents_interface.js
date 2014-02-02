@@ -30,6 +30,13 @@ Documents.create = function(callback, dgroupid, tmp_path) {
                 }, me.collection["documents"], "_id", ObjectID(docid.toString()), "parent", dgroupid, false
             );
 
+            // empty comments array
+            utils.setProperty(
+                function(success, res) {
+                    // TODO: check if an error occurs here
+                }, me.collection["documents"], "_id", ObjectID(docid.toString()), "comments", [], false
+            );
+
             // get current course ids
             utils.getProperty(get_group_dummy, me.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()), "documents");
         } else {
@@ -109,6 +116,61 @@ Documents.delete = function(callback, id) {
 
     Documents.getPath(delete_file, id);
     Documents.getGroup(got_group, id);
+};
+
+Documents.addComment = function(callback, id, data) {
+    var me = this;
+
+    function set_prop(success, res) {
+        if(!success) {
+            callback(false, res);
+            return;
+        }
+
+        callback(true, "the joke of the day");
+    }
+
+    function got_comments(success, res) {
+        if(!success) {
+            callback(false, res);
+            return;
+        }
+
+        res.push(data);
+        utils.setProperty(set_prop, me.collection["documents"], "_id", ObjectID(id.toString()), "comments", res);
+    }
+
+    utils.getProperty(got_comments, this.collection["documents"], "_id", ObjectID(id.toString()), "comments");
+};
+
+Documents.getCommentNumber = function(callback, id) {
+    function got_comments(success, res) {
+        if(!success) {
+            callback(false, res);
+            return;
+        }
+
+        callback(true, res.length);
+    }
+
+    utils.getProperty(got_comments, this.collection["documents"], "_id", ObjectID(id.toString()), "comments");
+};
+
+Documents.getComment = function(callback, id, comid) {
+    function got_comments(success, res) {
+        if(!success) {
+            callback(false, res);
+            return;
+        }
+
+        if(comid >= 0 && comid < res.length) {
+            callback(true, res[comid]);
+        } else {
+            callback(false, "Comment id out of bounds");
+        }
+    }
+
+    utils.getProperty(got_comments, this.collection["documents"], "_id", ObjectID(id.toString()), "comments");
 };
 
 Documents.getName = function(callback, id) {
