@@ -19,6 +19,7 @@ Documents.create = function(callback, dgroupid, tmp_path) {
     var me = this;
 
     function adder_dummy(success, result) {
+        console.log(arguments);
         if(success) {
             docid = result;
 
@@ -37,6 +38,7 @@ Documents.create = function(callback, dgroupid, tmp_path) {
     }
 
     function get_group_dummy(success, result) {
+        console.log(arguments);
         if(success) {
             documents = result || [];
 
@@ -49,7 +51,10 @@ Documents.create = function(callback, dgroupid, tmp_path) {
     }
 
     function set_group_dummy(success, result) {
+        console.log(arguments);
         if(success) {
+            var path = "./data/" + dgroupid + "/";
+
             // add path
             utils.setProperty(
                 function(err, res) {
@@ -57,7 +62,16 @@ Documents.create = function(callback, dgroupid, tmp_path) {
                 }, me.collection["documents"], "_id", ObjectID(dgroupid.toString()), "path", path, false
             );
 
-            //utils.download_file(on_download, request, path);
+            function on_file_loaded(success, res) {
+                if(!success) {
+                    callback(false, res);
+                    return;
+                }
+
+                callback(true, docid);
+            }
+
+            utils.save_file(on_file_loaded, tmp_path, path, docid);
         } else {
             callback(false, result);
         }

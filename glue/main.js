@@ -1,8 +1,9 @@
 var 
 http = require("http"), 
 url = require("url"), 
-qs =  require('querystring'), 
-yawsl = require("yawsl"); 
+qs =  require("querystring"), 
+yawsl = require("yawsl"),
+formidable = require("formidable");
 
 var users = require("./users.js"); 
 var db_data = require("./data.js");
@@ -172,9 +173,9 @@ function handle_interactive(req, res, data){
 	};
 	
 	if($methodname == "upload_doc"){
-		function download_file(callback, req) {
 			var form = formidable.IncomingForm();
 			form.parse(req, function(err, fields, files) {
+                console.log(arguments);
         		params = fields; 
         		if(err){
         			cb({"succss": false, "result": err}); 
@@ -182,8 +183,7 @@ function handle_interactive(req, res, data){
         			data.upload_doc(params.id, params.name, files.file.path, cb); 
         		}
         	}); 
-		}
-	
+        
 		return; 
 	}
 

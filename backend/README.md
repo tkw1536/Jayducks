@@ -3,6 +3,7 @@
 ## Needed modules
 
 * mongodb
+* fs
 
 ## Database layout
 

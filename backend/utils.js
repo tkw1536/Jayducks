@@ -1,19 +1,20 @@
 var MongoClient = require('mongodb').MongoClient;
+var fs = require('fs');
 
 
 var config = require("./config");
 
 
 // fs stuff
-function download_file(callback, req) {
-    var form = formidable.IncomingForm();
+function save_file(callback, tmp_path, final_path, final_file) {
+    // synchronous function calls FTW!!!
+    try {
+        fs.mkdirSync(final_path);
+    } catch(e) {}
 
-    form.parse(req, function(err, fields, files) {
-        // copy file, etc.
+    fs.renameSync(tmp_path, final_path + final_file);
 
-
-        callback(true, fields);
-    });
+    callback(true, final_file);
 }
 
 // database stuff
@@ -170,7 +171,7 @@ function deleteEntry(callback, collection, key, value) {
 
 
 // exports
-exports.download_file = download_file;
+exports.save_file = save_file;
 
 exports.connect_database = connect_database;
 
