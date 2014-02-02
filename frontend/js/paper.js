@@ -28,15 +28,15 @@ $(function(){
 
 
 	var refresh_comments = function(){
-		loadExternalJS("/request/list_comments?type=js&varname=comment_info&id="+id, function(){
+		loadExternalJS("/request/list_comments?type=js&varname=comment_info&time="+(new Date()).getTime().toString()+"&id="+id, function(){
 			if(comment_info.success){
 				$("#comments").empty().append(
-				$("<form>")
+				$("<form role='form'>")
 				.append(
 					"<input type='hidden' name='id' value='"+id+"'>", 
-					"<input type='text' name='message' value='Ur message here' id='commenttext'>", 
-					$("<button>").text("Add comment").click(function(){
-						loadExternalJS("/request/add_comment?type=js&varname=_nothing_&text="+escape($("#commenttext").val())+"&id="+id, function(){
+					"<input type='text' class='form-control' style='width:500px;' name='message' value='' id='commenttext'>", $("<br>"),
+					$("<button class='btn btn-primary'>").text("Add comment").click(function(){
+						loadExternalJS("/request/add_comment?type=js&varname=_nothing_&text="+escape($("#commenttext").val())+"&id="+id, $("<br>"),function(){
 							refresh_comments();
 						}); 
 						return false; 
@@ -44,12 +44,17 @@ $(function(){
 				)
 				)
 				comment_info.result.map(function(c){
-					console.log(c); 
+					var author = c["user"];
+					var text = c["text"];
+
+					$("#comments").append($("<br>"))
+						.append($("<div style='width:500px;' class=\"well\">")
+							.append(
+								$("<strong>").text(author)," : "+text)); 
 				}); 
 			} else {}
 		}); 
 	}
-
 	refresh_comments();
 	
 
