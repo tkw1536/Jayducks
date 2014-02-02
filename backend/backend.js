@@ -62,7 +62,7 @@ function setup_database(err, db) {
 
     if (false) {
         function bar(success, res) {
-            //Documents.create(dummy, res, null);
+            Documents.create(dummy, res, null);
         }
 
         function foo(success, res) {
