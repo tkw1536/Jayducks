@@ -75,12 +75,12 @@ function setup_database(err, db) {
 //    Documents.create(dummy, "52ed56f8ad74968342bfa3a7", null);
 
 //    Users.exists(dummy, "kpj2");
-//    Courses.exists(dummy, "52ed40ffd4e9690b39d96bb2");
+//    Courses.exists(dummy, "52eda1416866c3e75c501fdf");
 //    DocumentGroups.exists(dummy, "52ed56f8ad74968342bfa3a7");
 
 //    Users.list(dummy);
 //    Courses.list(dummy);
-//    Courses.delete(dummy, "52ed8da4e2765a3454eca3f6");
+//    Courses.delete(dummy, "52eda1416866c3e75c501fdf");
 
 //    Users.registerNew(dummy, "kpj2");
 //    Courses.create(dummy);

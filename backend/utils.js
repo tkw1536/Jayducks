@@ -46,7 +46,6 @@ function exists(callback, collection, key, value) {
         }
     }
 
-    console.log(JSON.stringify(query));
     collection.findOne(query, function(err, res) {
         catch_error(callback, handler, err, res);
     });
