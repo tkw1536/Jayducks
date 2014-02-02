@@ -80,7 +80,6 @@ function setup_database(err, db) {
 
 //    Users.list(dummy);
 //    Courses.list(dummy);
-//    Courses.delete(dummy, "52eda1416866c3e75c501fdf");
 
 //    Users.registerNew(dummy, "kpj2");
 //    Courses.create(dummy);
@@ -104,8 +103,8 @@ function setup_database(err, db) {
 //    DocumentGroups.getCourse(dummy, "52ed6ea7e808d84d4ae20883");
 
 //    Users.deleteUser(dummy, "kpj");
-//    Courses.delete(dummy, "52eda0252a288d865cd876d3");
-//    DocumentGroups.delete(dummy, "52ed9fb065131d495ce003ed");
+//    Courses.delete(dummy, "52edaa7d889c590d603f29dc");
+//    DocumentGroups.delete(dummy, "52edaa7d889c590d603f29dd");
 //    Documents.delete(dummy, "52ed9ded933871b45b6369f4");
 }
 

@@ -63,7 +63,7 @@ Courses.listGroups = function(callback, courseid) {
 
 Courses.delete = function(callback, courseid) {
     var group_num = -1;
-    var ccoll = this.collection["courses"];
+    var me = this;
 
     function delete_groups(success, res) {
         function on_group_deleted(success, res) {
@@ -77,7 +77,7 @@ Courses.delete = function(callback, courseid) {
 
             if(group_num == 0) {
                 // all groups are deleted
-                utils.deleteEntry(callback, ccoll, "_id", ObjectID(courseid.toString()));
+                utils.deleteEntry(callback, me.collection["courses"], "_id", ObjectID(courseid.toString()));
             }
         }
 
@@ -96,7 +96,7 @@ Courses.delete = function(callback, courseid) {
         group_num = res.length;
         if(group_num == 0) {
             // no groups to delete
-            utils.deleteEntry(callback, ccoll, "_id", ObjectID(courseid.toString()));
+            utils.deleteEntry(callback, me.collection["courses"], "_id", ObjectID(courseid.toString()));
         } else {
             for(var p in res) {
                 var group = res[p];
@@ -109,7 +109,7 @@ Courses.delete = function(callback, courseid) {
 };
 
 Courses.removeGroup = function(callback, courseid, groupid) {
-    var ccoll = this.collection["courses"];
+    var me = this;
 
     function set_groups(success, res) {
         if(!success) {
@@ -128,7 +128,7 @@ Courses.removeGroup = function(callback, courseid, groupid) {
         var index = res.indexOf(groupid);
         res.splice(index, 1);
 
-        utils.setProperty(set_groups, ccoll, "_id", ObjectID(courseid.toString()), "groups", res);
+        utils.setProperty(set_groups, me.collection["courses"], "_id", ObjectID(courseid.toString()), "groups", res);
     }
 
     Courses.listGroups(got_groups, courseid);
