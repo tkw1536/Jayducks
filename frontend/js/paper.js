@@ -26,6 +26,8 @@ $(function(){
 		return false; 
 	}); 
 
+	$("#email").find("a").attr("href","mailto:?subject=I wanted you to see this site&amp;body=Check out this pastpaper:"+location.href+location.hash)
+	$("#fb_share").attr("data-href","/get/"+id);
 	$("#result").attr("data", "/get/"+id); 
 	$("#result").find("a").attr("href", "/get/"+id); 
 	$("#dwn").attr("href", "/get/"+id);
