@@ -88,10 +88,14 @@ Documents.delete = function(callback, id) {
         }
 
         // delete file
-        fs.rmdirSync(res);
+        fs.unlinkSync(res);
         
         // delete database entry
         utils.deleteEntry(callback, me.collection["documents"], "_id", ObjectID(id.toString()));
+    }
+
+    function dummy(){
+        console.log(arguments); 
     }
 
     function got_group(success, res) {
