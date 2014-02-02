@@ -1,6 +1,7 @@
 var ObjectID = require('mongodb').ObjectID // needed to handle _id
 
 var utils = require('./utils');
+var DocumentGroups_Interface = require('./documentgroups_interface');
 
 
 // interface
@@ -24,9 +25,9 @@ Documents.create = function(callback, dgroupid, request) {
 
             // add parent entry
             utils.setProperty(
-                function(err, res) {
+                function(success, res) {
                     // TODO: check if an error occurs here
-                }, cccolll, "_id", ObjectID(dgroupid.toString()), "parent", dgroupid, false
+                }, cccolll, "_id", ObjectID(docid.toString()), "parent", dgroupid, false
             );
 
             // get current course ids
@@ -72,19 +73,36 @@ Documents.create = function(callback, dgroupid, request) {
 };
 
 Documents.delete = function(callback, id) {
+    var ccoll = this.collection["documents"];
+
     // delete file
-    function delete_file(err, res) {
-        if(err) {
-            callback(false, err);
+    function delete_file(success, res) {
+        if(!success) {
+            callback(false, res);
             return;
         }
 
         // TODO: delete file
         
         // delete database entry
-        utils.deleteEntry(callback, this.collection["documents"], "_id", ObjectID(id.toString()));
+        utils.deleteEntry(callback, ccoll, "_id", ObjectID(id.toString()));
     }
+
+    function dummy(success, res) {
+        // TODO: handle error case
+    }
+
+    function got_group(success, res) {
+        if(!success) {
+            callback(false, res);
+            return;
+        }
+
+        DocumentGroups_Interface.DocumentGroups.removeDocument(dummy, res, id);
+    }
+
     Documents.getPath(delete_file, id);
+    Documents.getGroup(got_group, id);
 };
 
 Documents.getName = function(callback, id) {

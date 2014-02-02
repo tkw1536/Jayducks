@@ -60,6 +60,18 @@ function setup_database(err, db) {
         console.log("[DUMMY] - status: " + success + " | result: " + JSON.stringify(result));
     }
 
+    if (false) {
+        function bar(success, res) {
+            Documents.create(dummy, res, null);
+        }
+
+        function foo(success, res) {
+            DocumentGroups.create(bar, res);
+        }
+
+        Courses.create(foo);
+    }
+
 //    Documents.create(dummy, "52ed56f8ad74968342bfa3a7", null);
 
 //    Users.exists(dummy, "kpj2");
@@ -68,10 +80,12 @@ function setup_database(err, db) {
 
 //    Users.list(dummy);
 //    Courses.list(dummy);
+//    Courses.delete(dummy, "52ed8da4e2765a3454eca3f6");
 
 //    Users.registerNew(dummy, "kpj2");
 //    Courses.create(dummy);
-//    DocumentGroups.create(dummy, "52ed550da5721e1742de8665");
+//    DocumentGroups.create(dummy, "52ed9b6d6de368aa5aff626b");
+//    Documents.create(dummy, "52ed9b7c6dbc4ab85ae095e5", null);
 
 //    Courses.setName(dummy, "52ed53a0e236988c41c0d274", "jDogs");
 //    Courses.getName(dummy, "52ed733291052c1a0f3a07cc");
@@ -86,11 +100,13 @@ function setup_database(err, db) {
 
 //    Courses.listGroups(dummy, "52ed40ffd4e9690b39d96bb2");
 
-    //Documents.getPath(dummy, "42");
+//    Documents.getPath(dummy, "42");
 //    DocumentGroups.getCourse(dummy, "52ed6ea7e808d84d4ae20883");
 
-    //Users.deleteUser(dummy, "kpj");
-//    Courses.delete(dummy, "52ed40ffd4e9690b39d96bb2");
+//    Users.deleteUser(dummy, "kpj");
+//    Courses.delete(dummy, "52eda0252a288d865cd876d3");
+//    DocumentGroups.delete(dummy, "52ed9fb065131d495ce003ed");
+//    Documents.delete(dummy, "52ed9ded933871b45b6369f4");
 }
 
 utils.connect_database(setup_database);

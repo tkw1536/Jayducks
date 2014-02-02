@@ -2,6 +2,7 @@ var ObjectID = require('mongodb').ObjectID // needed to handle _id
 
 var utils = require('./utils');
 var Documents_Interface = require('./documents_interface');
+var Courses_Interface = require('./courses_interface');
 
 
 // interface
@@ -62,35 +63,87 @@ DocumentGroups.create = function(callback, courseid) {
 
 DocumentGroups.delete = function(callback, dgroupid) {
     var document_num = -1;
+    var ccoll = this.collection["documentgroups"];
 
-    function delete_documents(err, res) {
-        function on_document_deleted(err, res) {
-            if(err) {
-                callback(false, err);
+    function delete_documents(success, res) {
+        function on_document_deleted(success, res) {
+            // document actually deleted
+            if(!success) {
+                callback(false, res);
                 return;
             }
 
             document_num--;
 
             if(document_num == 0) {
-                // all groups are deleted
-                utils.deleteEntry(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()));
+                // all documents are deleted
+                utils.deleteEntry(callback, ccoll, "_id", ObjectID(dgroupid.toString()));
             }
         }
 
-        if(err) {
-            callback(false, err);
+        if(!success) {
+            callback(false, res);
             return;
         }
 
+        res = res || [];
         document_num = res.length;
-        for(var p in res) {
-            var doc = res[p];
-            Documents_Interface.Documents.delete(on_document_deleted, doc.toString());
+        if(document_num == 0) {
+            utils.deleteEntry(callback, ccoll, "_id", ObjectID(dgroupid.toString()));
+        } else {
+            for(var p in res) {
+                var doc = res[p];
+                Documents_Interface.Documents.delete(on_document_deleted, doc.toString());
+            }
         }
     }
 
-    DocumentGroups.listGroups(delete_groups, courseid);
+    function dummy(success, res) {
+        // document deleted from own list
+        // TODO: handle this
+    }
+
+    function got_course(success, res) {
+        if(!success) {
+            callback(false, res);
+            return;
+        }
+
+        Courses_Interface.Courses.removeGroup(dummy, res, dgroupid);
+    }
+
+    DocumentGroups.listDocuments(delete_documents, dgroupid);
+    DocumentGroups.getCourse(got_course, dgroupid);
+};
+
+DocumentGroups.listDocuments = function(callback, dgroupid) {
+    utils.getProperty(callback, this.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()), "documents");
+};
+
+DocumentGroups.removeDocument = function(callback, dgroupid, docid) {
+    var ccoll = this.collection["documentgroups"];
+
+    function set_documents(success, res) {
+        if(!success) {
+            callback(false, res);
+            return;
+        }
+    }
+
+    function got_documents(success, res) {
+        if(!success) {
+            callback(false, res);
+            return;
+        }
+
+        res = res || [];
+        var index = res.indexOf(docid);
+        res.splice(index, 1);
+
+        utils.setProperty(set_documents, ccoll, "_id", ObjectID(dgroupid.toString()), "documents", res);
+    }
+
+    DocumentGroups.listDocuments(got_documents, dgroupid)
 };
 
 DocumentGroups.getName = function(callback, dgroupid) {
