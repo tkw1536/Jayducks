@@ -16,8 +16,7 @@ Documents.create = function(callback, dgroupid, request) {
     // TODO: add groups in a better way
     var docid = undefined;
     var documents = undefined;
-    var ccoll = this.collection["documentgroups"];
-    var cccolll = this.collection["documents"]; // sorry...
+    var me = this;
 
     function adder_dummy(success, result) {
         if(success) {
@@ -27,11 +26,11 @@ Documents.create = function(callback, dgroupid, request) {
             utils.setProperty(
                 function(success, res) {
                     // TODO: check if an error occurs here
-                }, cccolll, "_id", ObjectID(docid.toString()), "parent", dgroupid, false
+                }, me.collection["documents"], "_id", ObjectID(docid.toString()), "parent", dgroupid, false
             );
 
             // get current course ids
-            utils.getProperty(get_group_dummy, ccoll, "_id", ObjectID(dgroupid.toString()), "documents");
+            utils.getProperty(get_group_dummy, me.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()), "documents");
         } else {
             callback(false, result);
         }
@@ -43,7 +42,7 @@ Documents.create = function(callback, dgroupid, request) {
 
             // add and set new group id(s)
             documents.push(docid);
-            utils.setProperty(set_group_dummy, ccoll, "_id", ObjectID(dgroupid.toString()), "documents", documents);
+            utils.setProperty(set_group_dummy, me.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()), "documents", documents);
         } else {
             callback(false, result);
         }
@@ -58,7 +57,7 @@ Documents.create = function(callback, dgroupid, request) {
             utils.setProperty(
                 function(err, res) {
                     // TODO: check if an error occurs here
-                }, cccolll, "_id", ObjectID(dgroupid.toString()), "path", path, false
+                }, me.collection["documents"], "_id", ObjectID(dgroupid.toString()), "path", path, false
             );
 
             utils.download_file(request, path);
@@ -73,7 +72,7 @@ Documents.create = function(callback, dgroupid, request) {
 };
 
 Documents.delete = function(callback, id) {
-    var ccoll = this.collection["documents"];
+    var me = this;
 
     // delete file
     function delete_file(success, res) {
@@ -85,7 +84,7 @@ Documents.delete = function(callback, id) {
         // TODO: delete file
         
         // delete database entry
-        utils.deleteEntry(callback, ccoll, "_id", ObjectID(id.toString()));
+        utils.deleteEntry(callback, me.collection["documents"], "_id", ObjectID(id.toString()));
     }
 
     function dummy(success, res) {

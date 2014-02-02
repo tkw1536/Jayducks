@@ -17,8 +17,7 @@ DocumentGroups.create = function(callback, courseid) {
     // TODO: add groups in a better way
     var dgroupid = undefined;
     var groups = undefined;
-    var ccoll = this.collection["courses"];
-    var cccolll = this.collection["documentgroups"]; // -.-'
+    var me = this;
 
     function adder_dummy(success, result) {
         if(success) {
@@ -28,11 +27,18 @@ DocumentGroups.create = function(callback, courseid) {
             utils.setProperty(
                 function(err, res) {
                     // TODO: check if an error occurs here
-                }, cccolll, "_id", ObjectID(dgroupid.toString()), "parent", courseid, false
+                }, me.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()), "parent", courseid, false
+            );
+
+            // add empty documents array
+            utils.setProperty(
+                function(err, res) {
+                    // TODO: check if an error occurs here
+                }, me.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()), "documents", [], false
             );
 
             // get current course ids
-            utils.getProperty(get_group_dummy, ccoll, "_id", ObjectID(courseid.toString()), "groups");
+            utils.getProperty(get_group_dummy, me.collection["courses"], "_id", ObjectID(courseid.toString()), "groups");
         } else {
             callback(false, result);
         }
@@ -44,7 +50,7 @@ DocumentGroups.create = function(callback, courseid) {
 
             // add and set new group id(s)
             groups.push(dgroupid);
-            utils.setProperty(set_group_dummy, ccoll, "_id", ObjectID(courseid.toString()), "groups", groups);
+            utils.setProperty(set_group_dummy, me.collection["courses"], "_id", ObjectID(courseid.toString()), "groups", groups);
         } else {
             callback(false, result);
         }
@@ -63,7 +69,7 @@ DocumentGroups.create = function(callback, courseid) {
 
 DocumentGroups.delete = function(callback, dgroupid) {
     var document_num = -1;
-    var ccoll = this.collection["documentgroups"];
+    var me = this;
 
     function delete_documents(success, res) {
         function on_document_deleted(success, res) {
@@ -77,7 +83,7 @@ DocumentGroups.delete = function(callback, dgroupid) {
 
             if(document_num == 0) {
                 // all documents are deleted
-                utils.deleteEntry(callback, ccoll, "_id", ObjectID(dgroupid.toString()));
+                utils.deleteEntry(callback, me.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()));
             }
         }
 
@@ -89,7 +95,7 @@ DocumentGroups.delete = function(callback, dgroupid) {
         res = res || [];
         document_num = res.length;
         if(document_num == 0) {
-            utils.deleteEntry(callback, ccoll, "_id", ObjectID(dgroupid.toString()));
+            utils.deleteEntry(callback, me.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()));
         } else {
             for(var p in res) {
                 var doc = res[p];
@@ -121,7 +127,7 @@ DocumentGroups.listDocuments = function(callback, dgroupid) {
 };
 
 DocumentGroups.removeDocument = function(callback, dgroupid, docid) {
-    var ccoll = this.collection["documentgroups"];
+    var me = this;
 
     function set_documents(success, res) {
         if(!success) {
@@ -140,7 +146,7 @@ DocumentGroups.removeDocument = function(callback, dgroupid, docid) {
         var index = res.indexOf(docid);
         res.splice(index, 1);
 
-        utils.setProperty(set_documents, ccoll, "_id", ObjectID(dgroupid.toString()), "documents", res);
+        utils.setProperty(set_documents, me.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()), "documents", res);
     }
 
     DocumentGroups.listDocuments(got_documents, dgroupid)
