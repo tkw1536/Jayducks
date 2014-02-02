@@ -112,12 +112,7 @@ function perform(methodname, $args, req, res, data, cb){
 				}); 
 				break;
 			case "upload_doc": 
-				if(!users.allowed("list_docs", data)){
-					return cb({"success": "false", "result": "You are unauthorised. "})
-				}
-				db_data.upload_doc($args["id"], $args["name"], req, function(s, r){
-					cb({"success": s, "result": r})
-				}); 
+				cb({"success": false, "result": "Interactive only"}); 
 				break;
 			default:
 				cb({"success":false, "result": "Unknown or unimplemented method. "}); 
@@ -131,7 +126,6 @@ function perform(methodname, $args, req, res, data, cb){
 
 function handle_non(req, res, data){
 	var parsed_url = url.parse(req.url, true); 
-
 	var $methodname = parsed_url.pathname.substr(1); 
 	var varname = parsed_url.query.varname || "response_"+$methodname; 
 	var type = parsed_url.query.type || "json"; 
@@ -154,6 +148,24 @@ function handle_non(req, res, data){
 
 function handle_interactive(req, res, data){
 	//handle the interactive one here
+	var parsed_url = url.parse(req.url, true) || "/"; 
+	var $methodname = parsed_url.pathname.substr(1); 
+	
+	if($methodname == "upload_doc"){
+		if(!users.allowed("upload_doc", data)){
+			if(actionres["success"] == true){
+				res.writeHead(303, {
+					'Location': go_fail || go_success
+				});
+				res.end('{"success": "false", result: "Redirecting"}');
+			}
+			return cb({"success": "false", "result": "You are unauthorised. "})
+		}
+		db_data.upload_doc(req, function(s, r){
+			cb({"success": s, "result": r})
+		}); 
+		return; 
+	}
 
 	var body = ""; 
 	req.on('data', function (data) {
@@ -161,9 +173,7 @@ function handle_interactive(req, res, data){
 	});
 	req.on('end',function(){
 		var POST = qs.parse(body);
-
-		var parsed_url = url.parse(req.url, true); 
-		var $methodname = parsed_url.pathname.substr(1); 
+		
 		var params = POST; 
 		perform($methodname, params, req, res, data, function(actionres){
 			data.session.value.last_interactive_result = actionres; 

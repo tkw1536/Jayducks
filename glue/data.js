@@ -170,6 +170,6 @@ module.exports.docgroup_info  = function(id, cb){
 	}, id.toString()); 
 }; 
 
-module.exports.upload_doc = function(id, name, req, cb){
-	backend.Documents.create(cb, id, req); 
+module.exports.upload_doc = function(req, cb){
+	backend.Documents.create(cb, req); 
 }
