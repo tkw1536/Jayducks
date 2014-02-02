@@ -30,6 +30,13 @@ DocumentGroups.create = function(callback, courseid) {
                 }, me.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()), "parent", courseid, false
             );
 
+            // add empty documents array
+            utils.setProperty(
+                function(err, res) {
+                    // TODO: check if an error occurs here
+                }, me.collection["documentgroups"], "_id", ObjectID(dgroupid.toString()), "documents", [], false
+            );
+
             // get current course ids
             utils.getProperty(get_group_dummy, me.collection["courses"], "_id", ObjectID(courseid.toString()), "groups");
         } else {
