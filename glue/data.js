@@ -151,6 +151,14 @@ module.exports.delete_docgroup = function(id, cb){
 	}, id);
 }
 
+module.exports.delete_document = function(id, cb){
+	backend.Documents.delete(function(success, res){
+		cb(success, res); 
+	}, id);
+}
+
+
+
 
 module.exports.docgroup_info  = function(id, cb){
 	backend.DocumentGroups.getName(function(suc, res){
@@ -227,12 +235,10 @@ module.exports.redirect_file = function(id, req, resp){
 			res.end(res);
 		} else {
 			try{
-				console.log(res); 
 				resp.writeHead(200, {"Content-Type": "application/pdf"}); 
 				var fileStream = fs.createReadStream(res);//pump to the client
 				fileStream.pipe(resp);
 			} catch(e){
-				console.log(e); 
 				resp.writeHead(500);
 				resp.end("STREAM_PIPE_FAIL");
 			}
