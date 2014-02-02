@@ -1,6 +1,7 @@
 $(function(){
 	var id = location.hash.substring(1); 
 	var parent_id = undefined; 
+	var pparent_id; 
 
 	loadExternalJS("/request/document_info?type=js&varname=document_info&id="+id, function(){
 		if(document_info.success){
@@ -14,7 +15,7 @@ $(function(){
 		} else {}
 	}); 
 
-	$("#delete-document").click(function(){
+	$("#do-delete").click(function(){
 		$("<form action='/do/delete_document' method='POST'>")
 		.append(
 			"<input type='hidden' name='id' value='"+id+"'>", 
@@ -24,4 +25,8 @@ $(function(){
 		.submit(); 
 		return false; 
 	}); 
+
+	$("#result").attr("data", "/get/"+id); 
+	$("#result").find("a").attr("href", "/get/"+id); 
+	$("#dwn").attr("href", "/get/"+id);
 })

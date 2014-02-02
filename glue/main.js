@@ -123,6 +123,14 @@ function perform(methodname, $args, req, res, data, cb){
 					cb({"success": s, "result": r})
 				}); 
 				break; 
+			case "delete_document": 
+				if(!users.allowed("delete_document", data)){
+					return cb({"success": "false", "result": "You are unauthorised. "})
+				}
+				db_data.delete_document($args["id"], function(s, r){
+					cb({"success": s, "result": r})
+				}); 
+				break; 
 			default:
 				cb({"success":false, "result": "Unknown or unimplemented method. "}); 
 		}

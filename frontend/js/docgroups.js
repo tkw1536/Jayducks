@@ -23,8 +23,6 @@ $(function(){
 
 			var docGroups = docGroupList.result; 
 			var ol = $("<ol>").appendTo("#docGroupList"); 
-
-			console.log(docGroups); 
 			
               for(var i=0;i<docGroups.length;i++)
               {
