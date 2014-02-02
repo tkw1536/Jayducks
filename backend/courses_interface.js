@@ -43,11 +43,13 @@ Courses.listGroups = function(callback, courseid) {
 
 Courses.delete = function(callback, courseid) {
     var group_num = -1;
+    var ccoll = this.collection["courses"];
 
-    function delete_groups(err, res) {
-        function on_group_deleted(err, res) {
-            if(err) {
-                callback(false, err);
+    function delete_groups(success, res) {
+        function on_group_deleted(success, res) {
+            // actual entry deleted
+            if(!success) {
+                callback(false, res);
                 return;
             }
 
@@ -55,24 +57,62 @@ Courses.delete = function(callback, courseid) {
 
             if(group_num == 0) {
                 // all groups are deleted
-                utils.deleteEntry(callback, this.collection["courses"], "_id", ObjectID(courseid.toString()));
+                utils.deleteEntry(callback, ccoll, "_id", ObjectID(courseid.toString()));
             }
         }
 
-        if(err) {
-            callback(false, err);
+        function on_group_removed(success, res) {
+            // entry removed from own list
+            // TODO: catch errors
+        }
+
+        if(!success) {
+            callback(false, res);
             return;
         }
 
+        res = res || [];
+
         group_num = res.length;
-        for(var p in res) {
-            var group = res[p];
-            DocumentGroups_Interface.DocumentGroups.delete(on_group_deleted, group.toString());
+        if(group_num == 0) {
+            // no groups to delete
+            utils.deleteEntry(callback, ccoll, "_id", ObjectID(courseid.toString()));
+        } else {
+            for(var p in res) {
+                var group = res[p];
+                DocumentGroups_Interface.DocumentGroups.delete(on_group_deleted, group.toString());
+            }
         }
     }
 
     Courses.listGroups(delete_groups, courseid);
 };
+
+Courses.removeGroup = function(callback, courseid, groupid) {
+    var ccoll = this.collection["courses"];
+
+    function set_groups(success, res) {
+        if(!success) {
+            callback(false, res);
+            return;
+        }
+    }
+
+    function got_groups(success, res) {
+        if(!success) {
+            callback(false, res);
+            return;
+        }
+
+        res = res || [];
+        var index = res.indexOf(groupid);
+        res.splice(index, 1);
+
+        utils.setProperty(set_groups, ccoll, "_id", ObjectID(courseid.toString()), "groups", res);
+    }
+
+    Courses.listGroups(got_groups, courseid);
+}
 
 
 // exports

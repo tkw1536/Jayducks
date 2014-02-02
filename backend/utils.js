@@ -6,6 +6,8 @@ var config = require("./config");
 
 // fs stuff
 function download_file(req, path) {
+    return; // no working request object given
+
     req.setBodyEncoding("binary");
     var stream = new multipart.Stream(req);
 
