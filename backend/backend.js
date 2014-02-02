@@ -83,7 +83,7 @@ function setup_database(err, db) {
 //    Courses.delete(dummy, "52eda1416866c3e75c501fdf");
 
 //    Users.registerNew(dummy, "kpj2");
-//    Courses.create(dummy);
+    Courses.create(dummy);
 //    DocumentGroups.create(dummy, "52ed9b6d6de368aa5aff626b");
 //    Documents.create(dummy, "52ed9b7c6dbc4ab85ae095e5", null);
 

@@ -17,7 +17,18 @@ Courses.list = function(callback) {
 };
 
 Courses.create = function(callback) {
-    utils.createEntry(callback, this.collection["courses"], "name", "");
+    var me = this;
+
+    function on_create(success, res) {
+        if(!success) {
+            callback(false, res);
+            return;
+        }
+
+        utils.setProperty(callback, me.collection["courses"], "_id", ObjectID(res.toString()), "groups", []);
+    }
+
+    utils.createEntry(on_create, this.collection["courses"], "name", "");
 };
 
 Courses.getName = function(callback, courseid) {
