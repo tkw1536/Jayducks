@@ -1,4 +1,5 @@
-var ObjectID = require('mongodb').ObjectID // needed to handle _id
+var ObjectID = require('mongodb').ObjectID; // needed to handle _id
+var fs = require('fs');
 
 var utils = require('./utils');
 var DocumentGroups_Interface = require('./documentgroups_interface');
@@ -56,7 +57,7 @@ Documents.create = function(callback, dgroupid, tmp_path) {
             utils.setProperty(
                 function(err, res) {
                     // TODO: check if an error occurs here
-                }, me.collection["documents"], "_id", ObjectID(dgroupid.toString()), "path", path, false
+                }, me.collection["documents"], "_id", ObjectID(docid.toString()), "path", path + docid.toString(), false
             );
 
             function on_file_loaded(success, res) {
@@ -80,21 +81,17 @@ Documents.create = function(callback, dgroupid, tmp_path) {
 Documents.delete = function(callback, id) {
     var me = this;
 
-    // delete file
     function delete_file(success, res) {
         if(!success) {
             callback(false, res);
             return;
         }
 
-        // TODO: delete file
+        // delete file
+        fs.rmdirSync(res);
         
         // delete database entry
         utils.deleteEntry(callback, me.collection["documents"], "_id", ObjectID(id.toString()));
-    }
-
-    function dummy(success, res) {
-        // TODO: handle error case
     }
 
     function got_group(success, res) {
