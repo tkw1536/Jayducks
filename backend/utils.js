@@ -1,5 +1,5 @@
 var MongoClient = require('mongodb').MongoClient;
-var multipart = require('multipart');
+var multipart = require('formidable');
 
 var config = require("./config");
 
