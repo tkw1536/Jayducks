@@ -1,4 +1,5 @@
 var backend = require('../backend/backend.js'); 
+var formidable = require('formidable');
 
 
 module.exports.list_courses = function(cb){
@@ -170,6 +171,18 @@ module.exports.docgroup_info  = function(id, cb){
 	}, id.toString()); 
 }; 
 
-module.exports.upload_doc = function(req, cb){
-	backend.Documents.create(cb, req); 
+module.exports.upload_doc = function(id, name, path, cb){
+	backend.Documents.create(function(suc, res){
+		if(!suc){
+			cb(false, res); 
+			return; 
+		}
+		backend.Documents.setName(function(success, res2){
+			if(!success){
+				cb(success, res2); 
+			} else {
+				cb(true, {"name": name, "id": res})
+			}
+		}, res, name); 
+	}, id, path); 
 }

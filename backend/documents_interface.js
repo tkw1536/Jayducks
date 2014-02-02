@@ -12,11 +12,10 @@ Documents.exists = function(callback, id) {
     utils.exists(callback, this.collection["documents"], "_id", ObjectID(id.toString()));
 };
 
-Documents.create = function(callback, request) {
+Documents.create = function(callback, dgroupid, tmp_path) {
     // TODO: add groups in a better way
     var docid = undefined;
     var documents = undefined;
-    var dgroupid = undefined;
     var me = this;
 
     function adder_dummy(success, result) {
@@ -64,12 +63,7 @@ Documents.create = function(callback, request) {
         }
     }
 
-    function on_download(success, res) {
-        console.log(success, res);
-    }
-
-    //utils.createEntry(adder_dummy, this.collection["documents"], "name", "");
-    utils.download_file(on_download, request);
+    utils.createEntry(adder_dummy, this.collection["documents"], "name", "");
 };
 
 Documents.delete = function(callback, id) {

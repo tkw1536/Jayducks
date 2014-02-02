@@ -150,18 +150,40 @@ function handle_interactive(req, res, data){
 	//handle the interactive one here
 	var parsed_url = url.parse(req.url, true) || "/"; 
 	var $methodname = parsed_url.pathname.substr(1); 
+
+	var params = {}; 
+
+	var cb = function(actionres){
+		data.session.value.last_interactive_result = actionres; 
+		var go_success = params.go_success || "/"; 
+		var go_fail = params.go_fail; 
+
+		if(actionres["success"] == true){
+			res.writeHead(303, {
+				'Location': go_success
+			});
+			res.end('{"success": "true", result: "Redirecting"}');
+		} else {
+			res.writeHead(303, {
+				'Location': go_fail || go_success
+			});
+			res.end('{"success": "false", result: "Redirecting"}');
+		}
+	};
 	
 	if($methodname == "upload_doc"){
-		if(!users.allowed("upload_doc", data)){
-			res.writeHead(303, {
-				'Location': "/"
-			});
-		    res.end('{"success": "false", result: "Redirecting"}');
-			return;
+		function download_file(callback, req) {
+			var form = formidable.IncomingForm();
+			form.parse(req, function(err, fields, files) {
+        		params = fields; 
+        		if(err){
+        			cb({"succss": false, "result": err}); 
+        		} else {
+        			data.upload_doc(params.id, params.name, files.file.path, cb); 
+        		}
+        	}); 
 		}
-		db_data.upload_doc(req, function(s, r){
-			cb({"success": s, "result": r})
-		}); 
+	
 		return; 
 	}
 
@@ -172,24 +194,8 @@ function handle_interactive(req, res, data){
 	req.on('end',function(){
 		var POST = qs.parse(body);
 		
-		var params = POST; 
-		perform($methodname, params, req, res, data, function(actionres){
-			data.session.value.last_interactive_result = actionres; 
-			var go_success = POST.go_success || "/"; 
-			var go_fail = POST.go_fail; 
-
-			if(actionres["success"] == true){
-				res.writeHead(303, {
-					'Location': go_success
-				});
-				res.end('{"success": "true", result: "Redirecting"}');
-			} else {
-				res.writeHead(303, {
-					'Location': go_fail || go_success
-				});
-				res.end('{"success": "false", result: "Redirecting"}');
-			}
-		}); 
+		params = POST; 
+		perform($methodname, params, req, res, data, cb); 
 
 		
 		return false; 
