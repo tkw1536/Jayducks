@@ -82,7 +82,7 @@ function setup_database(err, db) {
 //    Courses.list(dummy);
 
 //    Users.registerNew(dummy, "kpj2");
-//    Courses.create(dummy);
+    Courses.create(dummy);
 //    DocumentGroups.create(dummy, "52ed9b6d6de368aa5aff626b");
 //    Documents.create(dummy, "52ed9b7c6dbc4ab85ae095e5", null);
 
