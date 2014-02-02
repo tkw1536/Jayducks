@@ -148,3 +148,28 @@ module.exports.delete_docgroup = function(id, cb){
 			cb(success, res); 
 	}, id);
 }
+
+
+module.exports.docgroup_info  = function(id, cb){
+	backend.DocumentGroups.getName(function(suc, res){
+		if(!suc){
+			cb(suc, res); 
+		} else {
+			backend.DocumentGroups.getCourse(function(suc, res2){
+				if(!suc){
+					 cb(false, res2); 
+				} else {
+					cb(true, {
+						"name": res, 
+						"parent": res2
+					});
+				}
+			}, id.toString())
+			
+		}
+	}, id.toString()); 
+}; 
+
+module.exports.upload_doc = function(id, name, req, cb){
+	backend.Documents.create(cb, id, req); 
+}
